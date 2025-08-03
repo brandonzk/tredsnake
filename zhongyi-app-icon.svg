@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- 主渐变 -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#5856D6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#AF52DE;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 背景渐变 -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1D1D1F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2C2C2E;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 光泽效果 -->
+    <linearGradient id="glossGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#FFFFFF;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0" />
+    </linearGradient>
+    
+    <!-- 阴影滤镜 -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+    
+    <!-- 内阴影滤镜 -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feOffset dx="0" dy="2"/>
+      <feGaussianBlur stdDeviation="4" result="offset-blur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.2"/>
+      <feComposite in2="offset-blur" operator="in"/>
+    </filter>
+  </defs>
+  
+  <!-- 背景圆角矩形 -->
+  <rect x="32" y="32" width="448" height="448" rx="96" ry="96" fill="url(#bgGradient)" filter="url(#shadow)"/>
+  
+  <!-- 主图标区域 -->
+  <g transform="translate(256,256)">
+    <!-- 中心AI核心 -->
+    <circle cx="0" cy="0" r="80" fill="url(#mainGradient)" filter="url(#innerShadow)"/>
+    
+    <!-- AI文字 -->
+    <text x="0" y="8" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="36" font-weight="700" fill="#FFFFFF">AI</text>
+    
+    <!-- 环绕的数据点 -->
+    <g opacity="0.8">
+      <!-- 数据节点 -->
+      <circle cx="120" cy="0" r="12" fill="#007AFF"/>
+      <circle cx="85" cy="85" r="10" fill="#5856D6"/>
+      <circle cx="0" cy="120" r="8" fill="#AF52DE"/>
+      <circle cx="-85" cy="85" r="10" fill="#FF9500"/>
+      <circle cx="-120" cy="0" r="12" fill="#FF3B30"/>
+      <circle cx="-85" cy="-85" r="10" fill="#34C759"/>
+      <circle cx="0" cy="-120" r="8" fill="#00C7BE"/>
+      <circle cx="85" cy="-85" r="10" fill="#FFD60A"/>
+    </g>
+    
+    <!-- 连接线 -->
+    <g stroke="#007AFF" stroke-width="2" fill="none" opacity="0.6">
+      <path d="M80,0 L120,0" stroke-dasharray="4,4">
+        <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite"/>
+      </path>
+      <path d="M57,57 L85,85" stroke-dasharray="4,4">
+        <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite" begin="0.25s"/>
+      </path>
+      <path d="M0,80 L0,120" stroke-dasharray="4,4">
+        <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+      </path>
+      <path d="M-57,57 L-85,85" stroke-dasharray="4,4">
+        <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite" begin="0.75s"/>
+      </path>
+      <path d="M-80,0 L-120,0" stroke-dasharray="4,4">
+        <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite" begin="1s"/>
+      </path>
+      <path d="M-57,-57 L-85,-85" stroke-dasharray="4,4">
+        <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite" begin="1.25s"/>
+      </path>
+      <path d="M0,-80 L0,-120" stroke-dasharray="4,4">
+        <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+      </path>
+      <path d="M57,-57 L85,-85" stroke-dasharray="4,4">
+        <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite" begin="1.75s"/>
+      </path>
+    </g>
+    
+    <!-- 保险盾牌图标 -->
+    <g transform="translate(0,-180)" opacity="0.7">
+      <path d="M-20,-10 L-20,10 Q-20,25 0,30 Q20,25 20,10 L20,-10 Q20,-15 15,-15 L-15,-15 Q-20,-15 -20,-10 Z" fill="#34C759"/>
+      <path d="M-8,-2 L-2,4 L12,-10" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    
+    <!-- 智能引擎齿轮 -->
+    <g transform="translate(140,-140)" opacity="0.6">
+      <circle cx="0" cy="0" r="20" fill="#FF9500"/>
+      <circle cx="0" cy="0" r="8" fill="#FFFFFF"/>
+      <animateTransform attributeName="transform" type="rotate" values="0;360" dur="8s" repeatCount="indefinite"/>
+    </g>
+  </g>
+  
+  <!-- 光泽效果 -->
+  <rect x="32" y="32" width="448" height="224" rx="96" ry="96" fill="url(#glossGradient)"/>
+  
+  <!-- 边框 -->
+  <rect x="32" y="32" width="448" height="448" rx="96" ry="96" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+</svg>

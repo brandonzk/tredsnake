@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中意赵珂保险AI智能引擎 - ZHONGYI Genesis AI Insurance Engine</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #1d1d1f;
+            --accent-color: #007aff;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --text-dark: #1d1d1f;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(0, 0, 0, 0.8);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--primary-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .nav-settings {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .settings-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .logo-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 400;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .nav-item:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Hero区域 - 满屏设计 */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)),
+                        url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"%3E%3Cdefs%3E%3ClinearGradient id="heroGrad" x1="0%25" y1="0%25" x2="100%25" y2="100%25"%3E%3Cstop offset="0%25" style="stop-color:%23000000;stop-opacity:1" /%3E%3Cstop offset="50%25" style="stop-color:%23001122;stop-opacity:1" /%3E%3Cstop offset="100%25" style="stop-color:%23000000;stop-opacity:1" /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="1920" height="1080" fill="url(%23heroGrad)"/%3E%3Cg transform="translate(960,540)" opacity="0.4"%3E%3Crect x="-300" y="-80" width="600" height="120" fill="%23333333" rx="15"/%3E%3Crect x="-200" y="-180" width="400" height="100" fill="%23444444" rx="12"/%3E%3Crect x="-30" y="-280" width="60" height="100" fill="%23555555"/%3E%3Ccircle cx="0" cy="-330" r="25" fill="%23666666"/%3E%3Crect x="-280" y="40" width="20" height="200" fill="%23333333"/%3E%3Crect x="-120" y="40" width="20" height="200" fill="%23333333"/%3E%3Crect x="120" y="40" width="20" height="200" fill="%23333333"/%3E%3Crect x="280" y="40" width="20" height="200" fill="%23333333"/%3E%3C/g%3E%3Cg stroke="%23007aff" stroke-width="2" fill="none" opacity="0.3"%3E%3Cpath d="M0,800 Q480,780 960,800 Q1440,820 1920,800" stroke-dasharray="15,10"/%3E%3Cpath d="M0,850 Q480,830 960,850 Q1440,870 1920,850" stroke-dasharray="12,12"/%3E%3C/g%3E%3C/svg%3E');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            padding: 0 20px;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, #a1a1a6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            background: #0056cc;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 16px 32px;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-primary);
+        }
+        
+        /* 设置面板 */
+        .settings-panel {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            min-width: 350px;
+            backdrop-filter: blur(20px);
+            display: none;
+            z-index: 10;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .settings-panel.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .settings-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .settings-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .settings-item {
+            margin-bottom: 15px;
+        }
+        
+        .settings-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .settings-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .resolution-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+        
+        /* 上传面板 */
+        .upload-panel {
+            position: absolute;
+            top: 120px;
+            right: 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            min-width: 300px;
+            backdrop-filter: blur(20px);
+            display: none;
+            z-index: 10;
+        }
+        
+        .upload-panel.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 15px;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--accent-color);
+            background: rgba(0, 122, 255, 0.05);
+        }
+        
+        .upload-area input[type="file"] {
+            display: none;
+        }
+        
+        /* 产品展示区域 */
+        .products-section {
+            padding: 100px 20px;
+            background: var(--secondary-color);
+            background-image: linear-gradient(135deg, rgba(29, 29, 31, 0.9), rgba(29, 29, 31, 0.7));
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+        
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .product-card {
+            background: var(--primary-color);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+        }
+        
+        .product-image {
+            height: 200px;
+            background: linear-gradient(135deg, #007aff, #0056cc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+        
+        .product-content {
+            padding: 30px;
+        }
+        
+        .product-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+        
+        .product-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .product-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        
+        .product-link:hover {
+            gap: 12px;
+        }
+        
+        /* 功能特性区域 */
+        .features-section {
+            padding: 100px 20px;
+            background: var(--primary-color);
+            background-image: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-color), #0056cc);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+        
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 15px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .admin-controls {
+                top: 70px;
+                right: 15px;
+                flex-direction: column;
+            }
+            
+            .upload-panel {
+                right: 15px;
+                min-width: calc(100vw - 30px);
+            }
+            
+            .products-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon" onclick="showIconUpload()">
+                <i class="fas fa-cog"></i>
+            </div>
+            <span>中意赵珂保险AI智能引擎</span>
+        </div>
+        <div class="nav-settings">
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-item">首页</a></li>
+                <li><a href="#products" class="nav-item">产品</a></li>
+                <li><a href="#features" class="nav-item">功能</a></li>
+                <li><a href="#contact" class="nav-item">联系</a></li>
+            </ul>
+            <button class="settings-btn" onclick="showSettingsPanel()">
+                <i class="fas fa-cog"></i>
+                页面设置
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Hero区域 -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">智能保险新时代</h1>
+            <p class="hero-subtitle">基于AI技术的下一代保险智能引擎，重新定义保险服务体验</p>
+            <div class="hero-cta">
+                <a href="insurance-assistant-standalone.html" class="btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    开始体验
+                </a>
+                <a href="#products" class="btn-secondary">
+                    <i class="fas fa-play"></i>
+                    了解更多
+                </a>
+            </div>
+        </div>
+        
+        <!-- 设置面板 -->
+        <div class="settings-panel" id="settingsPanel">
+            <!-- 图标设置 -->
+            <div class="settings-section">
+                <div class="settings-title">
+                    <i class="fas fa-star"></i>
+                    图标设置
+                </div>
+                <div class="settings-item">
+                    <label class="settings-label">应用图标</label>
+                    <div class="upload-area" onclick="document.getElementById('iconFile').click()">
+                        <i class="fas fa-star" style="font-size: 1.5rem; color: var(--accent-color); margin-bottom: 8px;"></i>
+                        <p style="color: var(--text-primary); margin-bottom: 3px; font-size: 14px;">点击上传图标</p>
+                        <input type="file" id="iconFile" accept=".svg,.png,.ico" onchange="uploadIcon(this)">
+                    </div>
+                    <div class="resolution-hint">建议分辨率：512x512px，支持 SVG, PNG, ICO 格式</div>
+                    <button onclick="resetIcon()" style="width: 100%; padding: 8px; margin-top: 10px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 12px;">恢复默认</button>
+                </div>
+            </div>
+            
+            <!-- 首页背景设置 -->
+            <div class="settings-section">
+                <div class="settings-title">
+                    <i class="fas fa-image"></i>
+                    首页背景设置
+                </div>
+                <div class="settings-item">
+                    <label class="settings-label">主图背景</label>
+                    <div class="upload-area" onclick="document.getElementById('heroFile').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 1.5rem; color: var(--accent-color); margin-bottom: 8px;"></i>
+                        <p style="color: var(--text-primary); margin-bottom: 3px; font-size: 14px;">点击上传主图</p>
+                        <input type="file" id="heroFile" accept=".svg,.png,.jpg,.jpeg" onchange="uploadHeroImage(this)">
+                    </div>
+                    <div class="resolution-hint">建议分辨率：1920x1080px，支持 SVG, PNG, JPG 格式</div>
+                    <button onclick="resetHeroImage()" style="width: 100%; padding: 8px; margin-top: 10px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 12px;">恢复默认</button>
+                </div>
+            </div>
+            
+            <!-- 产品区域背景设置 -->
+            <div class="settings-section">
+                <div class="settings-title">
+                    <i class="fas fa-th-large"></i>
+                    产品区域背景
+                </div>
+                <div class="settings-item">
+                    <label class="settings-label">产品展示背景</label>
+                    <div class="upload-area" onclick="document.getElementById('productsFile').click()">
+                        <i class="fas fa-image" style="font-size: 1.5rem; color: var(--accent-color); margin-bottom: 8px;"></i>
+                        <p style="color: var(--text-primary); margin-bottom: 3px; font-size: 14px;">点击上传背景</p>
+                        <input type="file" id="productsFile" accept=".svg,.png,.jpg,.jpeg" onchange="uploadProductsBackground(this)">
+                    </div>
+                    <div class="resolution-hint">建议分辨率：1920x800px，支持 SVG, PNG, JPG 格式</div>
+                    <button onclick="resetProductsBackground()" style="width: 100%; padding: 8px; margin-top: 10px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 12px;">恢复默认</button>
+                </div>
+            </div>
+            
+            <!-- 功能区域背景设置 -->
+            <div class="settings-section">
+                <div class="settings-title">
+                    <i class="fas fa-cogs"></i>
+                    功能区域背景
+                </div>
+                <div class="settings-item">
+                    <label class="settings-label">功能特性背景</label>
+                    <div class="upload-area" onclick="document.getElementById('featuresFile').click()">
+                        <i class="fas fa-image" style="font-size: 1.5rem; color: var(--accent-color); margin-bottom: 8px;"></i>
+                        <p style="color: var(--text-primary); margin-bottom: 3px; font-size: 14px;">点击上传背景</p>
+                        <input type="file" id="featuresFile" accept=".svg,.png,.jpg,.jpeg" onchange="uploadFeaturesBackground(this)">
+                    </div>
+                    <div class="resolution-hint">建议分辨率：1920x800px，支持 SVG, PNG, JPG 格式</div>
+                    <button onclick="resetFeaturesBackground()" style="width: 100%; padding: 8px; margin-top: 10px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 12px;">恢复默认</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 产品展示区域 -->
+    <section class="products-section" id="products">
+        <div class="section-header">
+            <h2 class="section-title">核心产品矩阵</h2>
+            <p class="section-subtitle">集成AI智能引擎、文档管理、产品展示的完整解决方案</p>
+        </div>
+        
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="product-content">
+                    <h3 class="product-title">AI智能引擎</h3>
+                    <p class="product-description">基于ChatGPT的智能客户分析、产品匹配和销售策略生成系统</p>
+                    <a href="insurance-assistant-standalone.html" class="product-link">
+                        立即体验 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-folder-open"></i>
+                </div>
+                <div class="product-content">
+                    <h3 class="product-title">智能文档管理</h3>
+                    <p class="product-description">统一管理产品资料、条款文档，为AI提供完整知识库支持</p>
+                    <a href="zhongyi-file-manager.html" class="product-link">
+                        查看详情 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="product-content">
+                    <h3 class="product-title">产品展示中心</h3>
+                    <p class="product-description">中意人寿全产品生态展示，集成说明书、条款和销售策略</p>
+                    <a href="zhongyi-products.html" class="product-link">
+                        浏览产品 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 功能特性区域 -->
+    <section class="features-section" id="features">
+        <div class="section-header">
+            <h2 class="section-title">核心功能特性</h2>
+            <p class="section-subtitle">先进的AI技术与保险业务深度融合</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3 class="feature-title">智能客户分析</h3>
+                <p class="feature-description">基于大数据和机器学习的客户画像分析，精准识别客户需求和风险偏好</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="feature-title">产品智能匹配</h3>
+                <p class="feature-description">AI驱动的产品推荐引擎，根据客户特征自动匹配最适合的保险产品</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="feature-title">销售话术生成</h3>
+                <p class="feature-description">智能生成个性化销售话术和产品建议，提升销售转化率</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h3 class="feature-title">知识库管理</h3>
+                <p class="feature-description">统一管理产品文档、条款说明，构建完整的保险知识图谱</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="feature-title">多端适配</h3>
+                <p class="feature-description">支持Web、移动端、桌面应用，随时随地访问AI保险助手</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="feature-title">安全可靠</h3>
+                <p class="feature-description">企业级安全保障，数据加密传输，确保客户信息安全</p>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // 显示设置面板
+        function showSettingsPanel() {
+            const panel = document.getElementById('settingsPanel');
+            panel.classList.toggle('show');
+        }
+        
+        // 点击外部关闭设置面板
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('settingsPanel');
+            const settingsBtn = document.querySelector('.settings-btn');
+            if (!panel.contains(e.target) && !settingsBtn.contains(e.target)) {
+                panel.classList.remove('show');
+            }
+        });
+        
+        // 上传主图
+        function uploadHeroImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const allowedTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('请上传 SVG, PNG 或 JPG 格式的文件');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                alert('文件大小不能超过10MB');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const hero = document.querySelector('.hero-section');
+                hero.style.backgroundImage = `linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url('${e.target.result}')`;
+                hero.style.backgroundSize = 'cover';
+                hero.style.backgroundPosition = 'center';
+                localStorage.setItem('customHeroImage', e.target.result);
+                alert('主图更新成功！');
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 重置主图
+        function resetHeroImage() {
+            const hero = document.querySelector('.hero-section');
+            hero.style.backgroundImage = `linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)),
+                        url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"%3E%3Cdefs%3E%3ClinearGradient id="heroGrad" x1="0%25" y1="0%25" x2="100%25" y2="100%25"%3E%3Cstop offset="0%25" style="stop-color:%23000000;stop-opacity:1" /%3E%3Cstop offset="50%25" style="stop-color:%23001122;stop-opacity:1" /%3E%3Cstop offset="100%25" style="stop-color:%23000000;stop-opacity:1" /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="1920" height="1080" fill="url(%23heroGrad)"//%3E%3Cg transform="translate(960,540)" opacity="0.4"%3E%3Crect x="-300" y="-80" width="600" height="120" fill="%23333333" rx="15"/%3E%3Crect x="-200" y="-180" width="400" height="100" fill="%23444444" rx="12"/%3E%3Crect x="-30" y="-280" width="60" height="100" fill="%23555555"/%3E%3Ccircle cx="0" cy="-330" r="25" fill="%23666666"/%3E%3Crect x="-280" y="40" width="20" height="200" fill="%23333333"/%3E%3Crect x="-120" y="40" width="20" height="200" fill="%23333333"/%3E%3Crect x="120" y="40" width="20" height="200" fill="%23333333"/%3E%3Crect x="280" y="40" width="20" height="200" fill="%23333333"/%3E%3C/g%3E%3Cg stroke="%23007aff" stroke-width="2" fill="none" opacity="0.3"%3E%3Cpath d="M0,800 Q480,780 960,800 Q1440,820 1920,800" stroke-dasharray="15,10"/%3E%3Cpath d="M0,850 Q480,830 960,850 Q1440,870 1920,850" stroke-dasharray="12,12"/%3E%3C/g%3E%3C/svg%3E')`;
+            localStorage.removeItem('customHeroImage');
+            alert('主图已恢复默认！');
+        }
+        
+        // 上传产品区域背景
+        function uploadProductsBackground(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const allowedTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('请上传 SVG, PNG 或 JPG 格式的文件');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                alert('文件大小不能超过10MB');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const productsSection = document.querySelector('.products-section');
+                productsSection.style.backgroundImage = `linear-gradient(135deg, rgba(29, 29, 31, 0.9), rgba(29, 29, 31, 0.7)), url('${e.target.result}')`;
+                productsSection.style.backgroundSize = 'cover';
+                productsSection.style.backgroundPosition = 'center';
+                productsSection.style.backgroundAttachment = 'fixed';
+                localStorage.setItem('customProductsBackground', e.target.result);
+                alert('产品区域背景更新成功！');
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 重置产品区域背景
+        function resetProductsBackground() {
+            const productsSection = document.querySelector('.products-section');
+            productsSection.style.backgroundImage = 'linear-gradient(135deg, rgba(29, 29, 31, 0.9), rgba(29, 29, 31, 0.7))';
+            localStorage.removeItem('customProductsBackground');
+            alert('产品区域背景已恢复默认！');
+        }
+        
+        // 上传功能区域背景
+        function uploadFeaturesBackground(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const allowedTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('请上传 SVG, PNG 或 JPG 格式的文件');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                alert('文件大小不能超过10MB');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const featuresSection = document.querySelector('.features-section');
+                featuresSection.style.backgroundImage = `linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7)), url('${e.target.result}')`;
+                featuresSection.style.backgroundSize = 'cover';
+                featuresSection.style.backgroundPosition = 'center';
+                featuresSection.style.backgroundAttachment = 'fixed';
+                localStorage.setItem('customFeaturesBackground', e.target.result);
+                alert('功能区域背景更新成功！');
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 重置功能区域背景
+        function resetFeaturesBackground() {
+            const featuresSection = document.querySelector('.features-section');
+            featuresSection.style.backgroundImage = 'linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7))';
+            localStorage.removeItem('customFeaturesBackground');
+            alert('功能区域背景已恢复默认！');
+        }
+        
+        // 上传图标
+        function uploadIcon(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const allowedTypes = ['image/svg+xml', 'image/png', 'image/x-icon'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('请上传 SVG, PNG 或 ICO 格式的文件');
+                return;
+            }
+            
+            if (file.size > 2 * 1024 * 1024) {
+                alert('文件大小不能超过2MB');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const logoIcon = document.querySelector('.logo i');
+                logoIcon.style.backgroundImage = `url('${e.target.result}')`;
+                logoIcon.style.backgroundSize = 'contain';
+                logoIcon.style.backgroundRepeat = 'no-repeat';
+                logoIcon.style.backgroundPosition = 'center';
+                logoIcon.innerHTML = '';
+                localStorage.setItem('customIcon', e.target.result);
+                alert('图标更新成功！');
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 重置图标
+        function resetIcon() {
+            const logoIcon = document.querySelector('.logo i');
+            logoIcon.style.backgroundImage = '';
+            logoIcon.innerHTML = '<i class="fas fa-cog"></i>';
+            localStorage.removeItem('customIcon');
+            alert('图标已恢复默认！');
+        }
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 页面加载时恢复自定义设置
+        document.addEventListener('DOMContentLoaded', function() {
+            // 恢复自定义主图
+            const customHeroImage = localStorage.getItem('customHeroImage');
+            if (customHeroImage) {
+                const hero = document.querySelector('.hero-section');
+                hero.style.backgroundImage = `linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url('${customHeroImage}')`;
+                hero.style.backgroundSize = 'cover';
+                hero.style.backgroundPosition = 'center';
+            }
+            
+            // 恢复产品区域背景
+            const customProductsBackground = localStorage.getItem('customProductsBackground');
+            if (customProductsBackground) {
+                const productsSection = document.querySelector('.products-section');
+                productsSection.style.backgroundImage = `linear-gradient(135deg, rgba(29, 29, 31, 0.9), rgba(29, 29, 31, 0.7)), url('${customProductsBackground}')`;
+                productsSection.style.backgroundSize = 'cover';
+                productsSection.style.backgroundPosition = 'center';
+                productsSection.style.backgroundAttachment = 'fixed';
+            }
+            
+            // 恢复功能区域背景
+            const customFeaturesBackground = localStorage.getItem('customFeaturesBackground');
+            if (customFeaturesBackground) {
+                const featuresSection = document.querySelector('.features-section');
+                featuresSection.style.backgroundImage = `linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7)), url('${customFeaturesBackground}')`;
+                featuresSection.style.backgroundSize = 'cover';
+                featuresSection.style.backgroundPosition = 'center';
+                featuresSection.style.backgroundAttachment = 'fixed';
+            }
+            
+            // 恢复自定义图标
+            const customIcon = localStorage.getItem('customIcon');
+            if (customIcon) {
+                const logoIcon = document.querySelector('.logo i');
+                logoIcon.style.backgroundImage = `url('${customIcon}')`;
+                logoIcon.style.backgroundSize = 'contain';
+                logoIcon.style.backgroundRepeat = 'no-repeat';
+                logoIcon.style.backgroundPosition = 'center';
+                logoIcon.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 全屏主容器 -->
+    <div class="fullscreen-container">
+        <!-- 顶部导航 -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo">Insurance Assistant</div>
+            </div>
+            <div class="nav-right">
+                <button class="share-btn" id="shareBtn">
+                    <i class="fas fa-share"></i>
+                    <span>分享</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 标题区域 -->
+            <section class="hero-section">
+                <h1 class="hero-title">智能保险分析</h1>
+                <p class="hero-subtitle">基于AI的专业保险需求分析与产品推荐</p>
+            </section>
+
+            <!-- 分析区域 -->
+            <section class="analysis-section">
+                <div class="input-area">
+                    <textarea 
+                        id="customerInput" 
+                        placeholder="请描述您的保险需求、家庭情况、收入状况等信息..."
+                        class="analysis-input"
+                    ></textarea>
+                    
+                    <div class="action-buttons">
+                        <button class="analyze-btn" id="analyzeBtn">
+                            <i class="fas fa-brain"></i>
+                            开始分析
+                        </button>
+                        <button class="clear-btn" id="clearBtn">
+                            <i class="fas fa-eraser"></i>
+                            清空
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 结果显示区域 -->
+                <div class="result-area" id="resultArea" style="display: none;">
+                    <div class="result-header">
+                        <h3>分析结果</h3>
+                    </div>
+                    <div class="result-content" id="analysisResult">
+                        <!-- 分析结果将在这里显示 -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 加载动画 -->
+        <div class="loading-overlay" id="loadingSpinner" style="display: none;">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p>AI正在分析中...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

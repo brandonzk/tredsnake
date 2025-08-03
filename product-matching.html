@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品匹配推荐 - 中意赵珂保险AI智能引擎</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #1d1d1f;
+            --accent-color: #007aff;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(0, 0, 0, 0.8);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --success-color: #30d158;
+            --warning-color: #ff9f0a;
+            --error-color: #ff453a;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--primary-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .page-banner {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)),
+                        url('中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (24).png');
+            background-size: 1920px 1080px;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 1080px;
+        }
+        
+        .banner-content {
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+            z-index: 2;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+        }
+        
+        .banner-title {
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 900;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffffff, #a1a1a6, #007aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        
+        .banner-subtitle {
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            color: var(--text-secondary);
+            margin-bottom: 50px;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+        
+        .banner-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff, #a1a1a6, #007aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        .analysis-input {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            margin-bottom: 25px;
+        }
+        
+        .input-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .input-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .input-textarea {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+        
+        .input-textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .input-textarea::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn:hover:not(:disabled) {
+            background: #0056cc;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        .results-section {
+            display: none;
+        }
+        
+        .results-section.show {
+            display: block;
+        }
+        
+        .results-header {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .results-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .results-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .product-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), #0056cc);
+        }
+        
+        .product-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .product-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-color), #0056cc);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .product-type {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .match-score {
+            background: linear-gradient(135deg, var(--success-color), #28a745);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .product-features {
+            margin-bottom: 20px;
+        }
+        
+        .features-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .features-list {
+            list-style: none;
+        }
+        
+        .features-list li {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .features-list li::before {
+            content: '✓';
+            color: var(--success-color);
+            font-weight: bold;
+        }
+        
+        .match-reason {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .reason-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .reason-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-small {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            justify-content: center;
+        }
+        
+        .btn-small:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+            color: var(--text-primary);
+        }
+        
+        .btn-small.primary {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+        
+        .btn-small.primary:hover {
+            background: #0056cc;
+        }
+        
+        .analysis-summary {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+        }
+        
+        .summary-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .summary-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: var(--text-primary);
+            backdrop-filter: blur(20px);
+            z-index: 1002;
+            transform: translateX(400px);
+            transition: var(--transition);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            border-color: var(--success-color);
+        }
+        
+        .notification.error {
+            border-color: var(--error-color);
+        }
+        
+        .footer {
+            background: var(--glass-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .footer-link:hover {
+            color: var(--accent-color);
+        }
+        
+        .footer-copyright {
+            color: var(--text-secondary);
+            font-size: 12px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 设置随机背景图片
+        const backgroundImages = [
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (31).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (32).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (33).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (34).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (35).png'
+        ];
+        const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+        document.addEventListener('DOMContentLoaded', function() {
+            const banner = document.querySelector('.page-banner');
+            banner.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('${randomImage}')`;
+        });
+    </script>
+    <div class="page-banner">
+        <div class="banner-content">
+            <h1 class="banner-title">Product Matching</h1>
+            <p class="banner-subtitle">产品匹配推荐</p>
+            <p class="banner-description">基于深度需求分析，智能匹配最优保险方案，让每一份保障都恰到好处</p>
+        </div>
+    </div>
+    
+    <a href="/" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        <span>返回主页</span>
+    </a>
+    
+    <div class="container">
+        
+        <div class="analysis-input" id="inputSection">
+            <div class="input-section">
+                <label class="input-label">客户需求分析结果</label>
+                <textarea 
+                    class="input-textarea" 
+                    id="customerAnalysis" 
+                    placeholder="请输入客户需求分析的结果，或从客户分析页面复制分析结果...">
+                </textarea>
+            </div>
+            
+            <div class="input-section">
+                <label class="input-label">补充信息（可选）</label>
+                <textarea 
+                    class="input-textarea" 
+                    id="additionalInfo" 
+                    placeholder="如有其他需要考虑的因素，请在此补充说明...">
+                </textarea>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn" onclick="startMatching()" id="matchBtn">
+                    <i class="fas fa-search"></i>
+                    <span>开始产品匹配</span>
+                </button>
+                <button class="btn btn-secondary" onclick="loadFromAnalysis()">
+                    <i class="fas fa-download"></i>
+                    <span>从分析结果导入</span>
+                </button>
+                <button class="btn btn-secondary" onclick="clearInputs()">
+                    <i class="fas fa-eraser"></i>
+                    <span>清空输入</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2 class="results-title">推荐产品</h2>
+                <p class="results-subtitle">基于客户需求分析，为您推荐以下产品</p>
+            </div>
+            
+            <div class="products-grid" id="productsGrid">
+                <!-- 产品推荐卡片将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="analysis-summary" id="analysisSummary">
+                <h3 class="summary-title">
+                    <i class="fas fa-chart-line"></i>
+                    匹配分析总结
+                </h3>
+                <div class="summary-content" id="summaryContent">
+                    <!-- 分析总结将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="loading" id="loadingSection" style="display: none;">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">正在分析客户需求并匹配产品...</div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <script>
+        let apiConfig = {
+            apiKey: localStorage.getItem('deepseek_api_key') || '',
+            baseUrl: localStorage.getItem('api_base_url') || 'https://api.deepseek.com',
+            model: localStorage.getItem('model_name') || 'deepseek-chat'
+        };
+        
+        let isMatching = false;
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!apiConfig.apiKey) {
+                showNotification('请先在主页配置API密钥', 'error');
+            }
+            
+            // 检查是否有传递的分析结果
+            const urlParams = new URLSearchParams(window.location.search);
+            const analysisResult = urlParams.get('analysis');
+            if (analysisResult) {
+                document.getElementById('customerAnalysis').value = decodeURIComponent(analysisResult);
+            }
+        });
+        
+        // 开始产品匹配
+        async function startMatching() {
+            const customerAnalysis = document.getElementById('customerAnalysis').value.trim();
+            const additionalInfo = document.getElementById('additionalInfo').value.trim();
+            
+            if (!customerAnalysis) {
+                showNotification('请输入客户需求分析结果', 'error');
+                return;
+            }
+            
+            if (!apiConfig.apiKey) {
+                showNotification('请先在主页配置API密钥', 'error');
+                return;
+            }
+            
+            // 获取产品库
+            const productDatabase = getProductDatabase();
+            if (productDatabase.length === 0) {
+                showNotification('产品库为空，请先在文档处理页面处理产品文档', 'error');
+                return;
+            }
+            
+            if (isMatching) {
+                showNotification('正在匹配中，请稍候...', 'warning');
+                return;
+            }
+            
+            isMatching = true;
+            
+            // 显示加载状态
+            document.getElementById('inputSection').style.display = 'none';
+            document.getElementById('resultsSection').classList.remove('show');
+            document.getElementById('loadingSection').style.display = 'block';
+            
+            try {
+                
+                // 调用AI进行产品匹配
+                console.log(`开始产品匹配，产品库包含 ${productDatabase.length} 个产品`);
+                const matchingResult = await performProductMatching(customerAnalysis, additionalInfo, productDatabase);
+                
+                // 显示匹配结果
+                displayMatchingResults(matchingResult);
+                
+                // 保存匹配结果
+                saveMatchingResult({
+                    customerAnalysis,
+                    additionalInfo,
+                    matchingResult,
+                    timestamp: new Date().toISOString()
+                });
+                
+                showNotification('产品匹配完成', 'success');
+                
+            } catch (error) {
+                console.error('匹配失败:', error);
+                showNotification('匹配失败: ' + error.message, 'error');
+                
+                // 恢复输入界面
+                document.getElementById('inputSection').style.display = 'block';
+            } finally {
+                isMatching = false;
+                document.getElementById('loadingSection').style.display = 'none';
+            }
+        }
+        
+        // 获取产品库
+        function getProductDatabase() {
+            const database = localStorage.getItem('product_database');
+            if (database) {
+                try {
+                    const products = JSON.parse(database);
+                    console.log('产品库数据:', products);
+                    return products;
+                } catch (error) {
+                    console.error('解析产品库数据失败:', error);
+                    return [];
+                }
+            } else {
+                console.warn('产品库为空，请先在文档处理页面处理产品文档');
+                return [];
+            }
+        }
+        
+        // 执行产品匹配
+        async function performProductMatching(customerAnalysis, additionalInfo, productDatabase) {
+            const productList = productDatabase.map((product, index) => {
+                return `${index + 1}. 产品名称：${product.originalName}\n   产品类型：${product.type}\n   产品特点：${product.processedContent.substring(0, 800)}...`;
+            }).join('\n\n');
+            
+            const prompt = `作为中意人寿专业的保险产品推荐专家，请根据客户需求分析结果，从以下中意人寿产品库中推荐2-3个最适合的保险产品。
+
+【客户需求分析】
+${customerAnalysis}
+
+${additionalInfo ? `【补充信息】\n${additionalInfo}\n\n` : ''}【中意人寿产品库】（共${productDatabase.length}个产品）
+${productList}
+
+【推荐要求】
+1. 严格限制：只能从上述产品库中选择，产品名称必须完全一致
+2. 推荐数量：2-3个产品，按匹配度排序
+3. 匹配原则：基于客户年龄、收入、保障需求、风险偏好等因素
+4. 分析深度：详细说明推荐理由和适用性
+
+【输出格式】请严格按照以下JSON格式输出：
+{
+  "recommendations": [
+    {
+      "productName": "产品库中的确切产品名称",
+      "productType": "产品类型",
+      "matchScore": 95,
+      "keyFeatures": ["核心特色1", "核心特色2", "核心特色3"],
+      "matchReason": "基于客户具体需求的详细匹配分析，说明为什么推荐此产品",
+      "suitability": "针对客户情况的适用性分析和注意事项"
+    }
+  ],
+  "summary": "整体推荐策略总结，包括产品组合建议和购买优先级"
+}
+
+请确保推荐的产品名称与产品库中的名称完全一致，并提供专业的保险规划建议。`;
+            
+            const response = await fetch(`${apiConfig.baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiConfig.apiKey}`
+                },
+                body: JSON.stringify({
+                    model: apiConfig.model,
+                    messages: [{ role: 'user', content: prompt }],
+                    temperature: 0.3,
+                    max_tokens: 2000
+                })
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || `HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const content = data.choices[0].message.content;
+            
+            try {
+                // 尝试解析JSON响应
+                const jsonMatch = content.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    return JSON.parse(jsonMatch[0]);
+                } else {
+                    throw new Error('AI响应格式不正确');
+                }
+            } catch (parseError) {
+                console.error('解析AI响应失败:', parseError);
+                // 如果JSON解析失败，返回一个默认结构
+                return {
+                    recommendations: [],
+                    summary: content
+                };
+            }
+        }
+        
+        // 显示匹配结果
+        function displayMatchingResults(result) {
+            const productsGrid = document.getElementById('productsGrid');
+            const summaryContent = document.getElementById('summaryContent');
+            
+            // 清空之前的结果
+            productsGrid.innerHTML = '';
+            
+            // 显示推荐产品
+            if (result.recommendations && result.recommendations.length > 0) {
+                result.recommendations.forEach((product, index) => {
+                    const productCard = createProductCard(product, index);
+                    productsGrid.appendChild(productCard);
+                });
+            } else {
+                productsGrid.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 40px;">未找到匹配的产品推荐</div>';
+            }
+            
+            // 显示分析总结
+            summaryContent.textContent = result.summary || '暂无分析总结';
+            
+            // 显示结果区域
+            document.getElementById('resultsSection').classList.add('show');
+        }
+        
+        // 创建产品卡片
+        function createProductCard(product, index) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            const features = product.keyFeatures || [];
+            const featuresHtml = features.map(feature => `<li>${feature}</li>`).join('');
+            
+            card.innerHTML = `
+                <div class="product-header">
+                    <div class="product-icon">
+                        <i class="fas ${getProductIcon(product.productType)}"></i>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.productName}</div>
+                        <div class="product-type">${product.productType}</div>
+                    </div>
+                    <div class="match-score">${product.matchScore || 90}% 匹配</div>
+                </div>
+                
+                <div class="product-features">
+                    <div class="features-title">产品特色</div>
+                    <ul class="features-list">
+                        ${featuresHtml}
+                    </ul>
+                </div>
+                
+                <div class="match-reason">
+                    <div class="reason-title">推荐理由</div>
+                    <div class="reason-text">${product.matchReason || '暂无推荐理由'}</div>
+                </div>
+                
+                <div class="product-actions">
+                    <button class="btn-small primary" onclick="selectProduct('${product.productName}')">
+                        <i class="fas fa-check"></i>
+                        选择此产品
+                    </button>
+                    <button class="btn-small" onclick="viewProductDetails('${product.productName}')">
+                        <i class="fas fa-info-circle"></i>
+                        查看详情
+                    </button>
+                    <button class="btn-small" onclick="addToFollowUp('${product.productName}')">
+                        <i class="fas fa-plus"></i>
+                        加入跟进
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // 获取产品图标
+        function getProductIcon(type) {
+            const icons = {
+                '终身寿险': 'fa-heart',
+                '重疾险': 'fa-shield-alt',
+                '年金险': 'fa-coins',
+                '定期寿险': 'fa-calendar-alt',
+                '意外险': 'fa-exclamation-triangle',
+                '医疗险': 'fa-hospital'
+            };
+            return icons[type] || 'fa-file-alt';
+        }
+        
+        // 选择产品
+        function selectProduct(productName) {
+            showNotification(`已选择产品：${productName}`, 'success');
+            // 这里可以添加选择产品后的逻辑
+        }
+        
+        // 查看产品详情
+        function viewProductDetails(productName) {
+            const productDatabase = getProductDatabase();
+            const product = productDatabase.find(p => p.originalName === productName);
+            
+            if (product) {
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>${product.originalName} - 产品详情</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+                                .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
+                                h1 { color: #333; border-bottom: 2px solid #007aff; padding-bottom: 10px; }
+                                pre { background: #f8f8f8; padding: 15px; border-radius: 5px; white-space: pre-wrap; }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <h1>${product.originalName}</h1>
+                                <p><strong>产品类型：</strong>${product.type}</p>
+                                <p><strong>处理时间：</strong>${new Date(product.processedAt).toLocaleString('zh-CN')}</p>
+                                <h2>产品详情：</h2>
+                                <pre>${product.processedContent}</pre>
+                            </div>
+                        </body>
+                    </html>
+                `);
+            } else {
+                showNotification('未找到产品详情', 'error');
+            }
+        }
+        
+        // 加入跟进
+        function addToFollowUp(productName) {
+            // 获取当前匹配结果
+            const matchingResult = localStorage.getItem('latest_matching_result');
+            if (matchingResult) {
+                const data = JSON.parse(matchingResult);
+                // 跳转到客户跟进页面，并传递产品信息
+                window.location.href = `/customer-followup.html?product=${encodeURIComponent(productName)}&analysis=${encodeURIComponent(data.customerAnalysis)}`;
+            } else {
+                showNotification('请先完成产品匹配', 'warning');
+            }
+        }
+        
+        // 从分析结果导入
+        function loadFromAnalysis() {
+            // 尝试从客户分析页面获取最新分析结果
+            const customerAnalysis = localStorage.getItem('latest_customer_analysis');
+            if (customerAnalysis) {
+                try {
+                    const data = JSON.parse(customerAnalysis);
+                    document.getElementById('customerAnalysis').value = data.result || '';
+                    showNotification('已导入客户分析结果', 'success');
+                } catch (error) {
+                    console.error('解析分析结果失败:', error);
+                    showNotification('分析结果格式错误', 'error');
+                }
+            } else {
+                showNotification('未找到分析结果，请先在客户分析页面进行分析', 'warning');
+            }
+        }
+        
+        // 清空输入
+        function clearInputs() {
+            document.getElementById('customerAnalysis').value = '';
+            document.getElementById('additionalInfo').value = '';
+            document.getElementById('resultsSection').classList.remove('show');
+            document.getElementById('inputSection').style.display = 'block';
+            showNotification('已清空输入', 'success');
+        }
+        
+        // 保存匹配结果
+        function saveMatchingResult(data) {
+            localStorage.setItem('latest_matching_result', JSON.stringify(data));
+        }
+        
+        // 添加日志功能
+        function addLog(message, type = 'info') {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+    </script>
+    
+    <!-- 底部版权信息 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Copyright © 2025 Product Matching. All rights reserved by 赵珂</p>
+        </div>
+    </footer>
+    
+    <script src="common.js"></script>
+</body>
+</html>

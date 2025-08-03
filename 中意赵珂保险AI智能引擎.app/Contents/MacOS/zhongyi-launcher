@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# 中意赵珂保险AI智能引擎启动器
+# 版本: 1.0.0
+# 作者: 中意创世纪AI团队
+
+set -e
+
+# 获取应用包路径
+APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+PROJECT_DIR="/Users/zhaoke/Desktop/zhongyi-ai-engine"
+
+echo "🚀 启动中意赵珂保险AI智能引擎..."
+echo "📁 应用路径: $APP_DIR"
+echo "📁 项目路径: $PROJECT_DIR"
+
+# 检查Python环境
+if ! command -v python3 &> /dev/null; then
+    osascript -e 'display dialog "错误：未找到Python 3环境\n\n请先安装Python 3.7或更高版本" buttons {"确定"} default button "确定" with icon stop'
+    exit 1
+fi
+
+PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+echo "🐍 Python版本: $PYTHON_VERSION"
+
+# 检查必要文件
+START_SCRIPT="$PROJECT_DIR/start_zhongyi_app.py"
+if [ ! -f "$START_SCRIPT" ]; then
+    osascript -e 'display dialog "错误：启动脚本不存在\n\n请确保start_zhongyi_app.py文件存在" buttons {"确定"} default button "确定" with icon stop'
+    exit 1
+fi
+
+# 显示启动提示
+osascript -e 'display dialog "中意赵珂保险AI智能引擎正在启动...\n\n• 正在启动API服务器\n• 正在启动Web服务器\n• 正在打开浏览器\n\n请稍候..." buttons {"确定"} default button "确定" with icon note giving up after 3'
+
+# 切换到项目目录并启动
+cd "$PROJECT_DIR"
+
+echo "📂 切换到项目目录: $(pwd)"
+echo "🎯 执行启动脚本..."
+
+# 启动应用
+python3 "$START_SCRIPT"
+
+# 如果脚本执行失败，显示错误信息
+if [ $? -ne 0 ]; then
+    osascript -e 'display dialog "启动失败！\n\n请检查：\n1. 网络连接是否正常\n2. 端口5001和8002是否被占用\n3. Python环境是否正确配置\n\n如需帮助，请查看使用说明文档" buttons {"确定"} default button "确定" with icon stop'
+    exit 1
+fi
+
+echo "✅ 应用启动完成！"

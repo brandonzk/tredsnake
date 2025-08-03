@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户需求分析 - 中意赵珂保险AI智能引擎</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <style>
+        
+        .analysis-form {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+        
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .analyze-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .analyze-btn:hover:not(:disabled) {
+            background: #0056cc;
+            transform: translateY(-2px);
+        }
+        
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .result-section {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            display: none;
+        }
+        
+        .result-section.show {
+            display: block;
+        }
+        
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            color: var(--text-primary);
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: var(--text-primary);
+            backdrop-filter: blur(20px);
+            z-index: 1002;
+            transform: translateX(400px);
+            transition: var(--transition);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            border-color: var(--success-color);
+        }
+        
+        .notification.error {
+            border-color: var(--error-color);
+        }
+        
+        .footer {
+            background: var(--glass-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+        
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .footer-link:hover {
+            color: var(--accent-color);
+        }
+        
+        .footer-copyright {
+            color: var(--text-secondary);
+            font-size: 12px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .analysis-form,
+            .result-section {
+                padding: 25px;
+            }
+            
+            .back-btn {
+                top: 15px;
+                left: 15px;
+                padding: 10px 16px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-banner">
+        <div class="banner-content">
+            <h1 class="banner-title">Customer Analysis</h1>
+            <p class="banner-subtitle">客户需求分析</p>
+            <p class="banner-description">智能解读客户心声，精准洞察保险需求，为每位客户量身定制专业分析报告</p>
+        </div>
+    </div>
+    
+    <style>
+        .banner-title {
+            font-size: clamp(3.5rem, 10vw, 7rem) !important;
+            font-weight: 900 !important;
+            margin-bottom: 30px !important;
+            background: linear-gradient(135deg, #ffffff, #a1a1a6, #007aff) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            line-height: 1.1 !important;
+            letter-spacing: -0.02em !important;
+        }
+        
+        .banner-subtitle {
+            font-size: clamp(1.4rem, 4vw, 2.2rem) !important;
+            color: var(--text-secondary) !important;
+            margin-bottom: 50px !important;
+            font-weight: 400 !important;
+            line-height: 1.4 !important;
+        }
+    </style>
+    
+    <a href="/" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        <span>返回主页</span>
+    </a>
+    
+    <div class="container">
+        
+        <div class="analysis-form">
+            <div class="form-group">
+                <label class="form-label">客户基本信息</label>
+                <input type="text" class="form-input" id="customerInfo" placeholder="请输入客户姓名、年龄、职业、收入等基本信息">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">客户聊天记录</label>
+                <textarea class="form-textarea" id="chatHistory" placeholder="请粘贴与客户的聊天记录，包括客户的问题、关注点、担忧等内容"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">您的了解和观察</label>
+                <textarea class="form-textarea" id="observations" placeholder="请输入您对客户的了解，如家庭情况、风险偏好、购买意向等"></textarea>
+            </div>
+            
+            <button class="analyze-btn" onclick="analyzeCustomer()">
+                <i class="fas fa-brain"></i>
+                <span>开始AI分析</span>
+            </button>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>AI正在分析客户需求，请稍候...</p>
+        </div>
+        
+        <div class="result-section" id="resultSection">
+            <h2 class="result-title">
+                <i class="fas fa-chart-line"></i>
+                分析结果
+            </h2>
+            <div class="result-content" id="resultContent"></div>
+            <div class="action-buttons">
+                <button class="btn-secondary" onclick="copyResult()">
+                    <i class="fas fa-copy"></i>
+                    复制结果
+                </button>
+                <button class="btn-secondary" onclick="saveResult()">
+                    <i class="fas fa-save"></i>
+                    保存结果
+                </button>
+                <a href="/product-matching.html" class="btn-secondary">
+                    <i class="fas fa-arrow-right"></i>
+                    产品匹配
+                </a>
+                <button class="btn-secondary" onclick="clearForm()">
+                    <i class="fas fa-refresh"></i>
+                    重新分析
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <!-- 底部版权信息 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Copyright © 2025 Customer Analysis. All rights reserved by 赵珂</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 背景图片数组
+        const backgroundImages = [
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (26).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (27).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (29).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (30).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (31).png'
+        ];
+        
+        // 随机选择背景图片
+        function setRandomBackground() {
+            const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+            const selectedImage = backgroundImages[randomIndex];
+            const banner = document.querySelector('.page-banner');
+            banner.style.backgroundImage = `url('${selectedImage}')`;
+        }
+        
+        // 页面加载时设置随机背景
+        document.addEventListener('DOMContentLoaded', setRandomBackground);
+        
+        let apiConfig = {
+            apiKey: localStorage.getItem('deepseek_api_key') || '',
+            baseUrl: localStorage.getItem('api_base_url') || 'https://api.deepseek.com',
+            model: localStorage.getItem('model_name') || 'deepseek-chat'
+        };
+        
+        // 检查API配置
+        if (!apiConfig.apiKey) {
+            showNotification('请先在主页配置API密钥', 'error');
+        }
+        
+        // 分析客户需求
+        async function analyzeCustomer() {
+            const customerInfo = document.getElementById('customerInfo').value.trim();
+            const chatHistory = document.getElementById('chatHistory').value.trim();
+            const observations = document.getElementById('observations').value.trim();
+            
+            if (!customerInfo || !chatHistory) {
+                showNotification('请填写客户基本信息和聊天记录', 'error');
+                return;
+            }
+            
+            if (!apiConfig.apiKey) {
+                showNotification('请先配置API密钥', 'error');
+                return;
+            }
+            
+            // 显示加载状态
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('resultSection').classList.remove('show');
+            document.querySelector('.analyze-btn').disabled = true;
+            
+            try {
+                const prompt = buildAnalysisPrompt(customerInfo, chatHistory, observations);
+                const result = await callDeepSeekAPI(prompt);
+                
+                // 显示结果
+                document.getElementById('resultContent').textContent = result;
+                document.getElementById('resultSection').classList.add('show');
+                
+                // 保存到本地存储
+                const analysisData = {
+                    customerInfo,
+                    chatHistory,
+                    observations,
+                    result,
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('latest_customer_analysis', JSON.stringify(analysisData));
+                
+                showNotification('客户需求分析完成', 'success');
+            } catch (error) {
+                console.error('分析失败:', error);
+                showNotification('分析失败: ' + error.message, 'error');
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+                document.querySelector('.analyze-btn').disabled = false;
+            }
+        }
+        
+        // 构建分析提示词
+        function buildAnalysisPrompt(customerInfo, chatHistory, observations) {
+            return `作为中意人寿专业的保险需求分析师，请根据以下信息对客户进行全面的需求分析：
+
+客户基本信息：
+${customerInfo}
+
+客户聊天记录：
+${chatHistory}
+
+销售人员观察：
+${observations}
+
+**重要说明：请仅基于中意人寿的保险产品进行分析和建议，不要提及其他保险公司的产品。**
+
+中意人寿主要产品类型包括：
+- 终身寿险（如中意悦享人生终身寿险）
+- 重大疾病保险（如中意安康重大疾病保险、中意康健一生重大疾病保险）
+- 年金保险（如中意福满堂年金保险）
+- 定期寿险（如中意智选定期寿险）
+- 意外伤害保险（如中意人寿意外伤害保险）
+- 医疗保险（如中意百万医疗保险）
+
+请从以下维度进行分析并输出标准化的客户需求报告：
+
+1. 客户画像
+   - 年龄阶段和生命周期
+   - 职业特点和收入水平
+   - 家庭结构和责任
+
+2. 风险偏好评估
+   - 风险承受能力（保守/稳健/积极）
+   - 投资偏好
+   - 保障需求优先级
+
+3. 保险需求分析
+   - 主要保障需求（寿险/重疾/意外/医疗等）
+   - 保额需求估算
+   - 缴费能力分析
+   - 适合的中意人寿产品类型
+
+4. 购买意向评估
+   - 购买紧迫性（高/中/低）
+   - 决策影响因素
+   - 潜在异议点
+
+5. 推荐策略
+   - 中意人寿产品类型建议
+   - 沟通重点
+   - 跟进建议
+
+重要提醒：
+- 本分析仅针对中意人寿保险产品进行需求匹配
+- 不要提及其他保险公司的产品
+- 重点分析客户与中意人寿产品的匹配度
+
+请用专业、客观的语言输出分析结果，专注于中意人寿产品的匹配性，为后续的产品匹配提供准确依据。`;
+        }
+        
+        // 调用DeepSeek API
+        async function callDeepSeekAPI(prompt) {
+            const response = await fetch(`${apiConfig.baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiConfig.apiKey}`
+                },
+                body: JSON.stringify({
+                    model: apiConfig.model,
+                    messages: [
+                        {
+                            role: 'user',
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 2000
+                })
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || `HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+        
+        // 复制结果
+        function copyResult() {
+            const resultContent = document.getElementById('resultContent').textContent;
+            navigator.clipboard.writeText(resultContent).then(() => {
+                showNotification('分析结果已复制到剪贴板', 'success');
+            }).catch(() => {
+                showNotification('复制失败', 'error');
+            });
+        }
+        
+        // 保存结果
+        function saveResult() {
+            const resultContent = document.getElementById('resultContent').textContent;
+            const customerInfo = document.getElementById('customerInfo').value;
+            const timestamp = new Date().toLocaleString('zh-CN');
+            
+            const filename = `客户需求分析_${timestamp.replace(/[:/\s]/g, '_')}.txt`;
+            const content = `客户需求分析报告\n\n生成时间：${timestamp}\n客户信息：${customerInfo}\n\n${resultContent}`;
+            
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('分析结果已保存', 'success');
+        }
+        
+        // 清空表单
+        function clearForm() {
+            document.getElementById('customerInfo').value = '';
+            document.getElementById('chatHistory').value = '';
+            document.getElementById('observations').value = '';
+            document.getElementById('resultSection').classList.remove('show');
+            showNotification('表单已清空', 'success');
+        }
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + Enter 开始分析
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                analyzeCustomer();
+            }
+        });
+    </script>
+    <script src="common.js"></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 主要渐变 -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#16213e;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#0f3460;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a2a4a;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 科技蓝渐变 -->
+    <linearGradient id="techGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0099cc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#006699;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 发光效果 -->
+    <radialGradient id="glowEffect" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.4" />
+      <stop offset="70%" style="stop-color:#00d4ff;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- 内部发光 -->
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="40%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- 外部发光背景 -->
+  <circle cx="256" cy="256" r="240" fill="url(#glowEffect)" opacity="0.8"/>
+  
+  <!-- 主背景圆角矩形 -->
+  <rect x="32" y="32" width="448" height="448" rx="80" ry="80" 
+        fill="url(#mainGradient)" stroke="#00d4ff" stroke-width="4"/>
+  
+  <!-- 内部发光效果 -->
+  <rect x="32" y="32" width="448" height="448" rx="80" ry="80" 
+        fill="url(#innerGlow)"/>
+  
+  <!-- 中心主图标区域 -->
+  <g transform="translate(256, 256)">
+    
+    <!-- 中心圆形背景 -->
+    <circle cx="0" cy="0" r="120" fill="none" stroke="url(#techGradient)" stroke-width="6" opacity="0.3"/>
+    <circle cx="0" cy="0" r="90" fill="none" stroke="url(#techGradient)" stroke-width="4" opacity="0.5"/>
+    
+    <!-- 中意Logo核心 -->
+    <g>
+      <!-- 外圈装饰 -->
+      <circle cx="0" cy="0" r="60" fill="none" stroke="#00d4ff" stroke-width="3" stroke-dasharray="10,5" opacity="0.6">
+        <animateTransform attributeName="transform" type="rotate" values="0;360" dur="20s" repeatCount="indefinite"/>
+      </circle>
+      
+      <!-- 主Logo背景 -->
+      <circle cx="0" cy="0" r="45" fill="#1a1a2e" stroke="url(#techGradient)" stroke-width="3"/>
+      
+      <!-- 中意标志 - 抽象的"中"字设计 -->
+      <g stroke="url(#techGradient)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <!-- 垂直线 -->
+        <line x1="0" y1="-25" x2="0" y2="25"/>
+        <!-- 水平线 -->
+        <line x1="-20" y1="-8" x2="20" y2="-8"/>
+        <line x1="-15" y1="8" x2="15" y2="8"/>
+        <!-- 装饰点 -->
+        <circle cx="0" cy="-8" r="2" fill="#00d4ff"/>
+      </g>
+    </g>
+    
+    <!-- 科技元素装饰 -->
+    <g stroke="#00d4ff" stroke-width="2" fill="none" opacity="0.4">
+      <!-- 四角科技线条 -->
+      <g transform="rotate(45)">
+        <path d="M-80,-80 L-60,-80 L-60,-60" stroke-linecap="round"/>
+        <path d="M80,-80 L60,-80 L60,-60" stroke-linecap="round"/>
+        <path d="M80,80 L60,80 L60,60" stroke-linecap="round"/>
+        <path d="M-80,80 L-60,80 L-60,60" stroke-linecap="round"/>
+      </g>
+      
+      <!-- 数据流线条 -->
+      <g opacity="0.3">
+        <path d="M-100,0 Q-50,-30 0,0 Q50,30 100,0" stroke-dasharray="5,5">
+          <animate attributeName="stroke-dashoffset" values="0;-20" dur="2s" repeatCount="indefinite"/>
+        </path>
+        <path d="M0,-100 Q30,-50 0,0 Q-30,50 0,100" stroke-dasharray="5,5">
+          <animate attributeName="stroke-dashoffset" values="0;-20" dur="2.5s" repeatCount="indefinite"/>
+        </path>
+      </g>
+    </g>
+  </g>
+  
+  <!-- 底部文字区域 -->
+  <g transform="translate(256, 420)">
+    <!-- 主标题 -->
+    <text x="0" y="0" text-anchor="middle" 
+          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" 
+          font-size="32" font-weight="700" fill="#ffffff">
+      ZHONGYI
+    </text>
+    
+    <!-- 副标题 -->
+    <text x="0" y="25" text-anchor="middle" 
+          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" 
+          font-size="16" font-weight="400" fill="#00d4ff">
+      Genesis Platform
+    </text>
+  </g>
+  
+  <!-- 顶部装饰 -->
+  <g transform="translate(256, 80)">
+    <text x="0" y="0" text-anchor="middle" 
+          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" 
+          font-size="18" font-weight="600" fill="#00d4ff" opacity="0.8">
+      智能生态系统
+    </text>
+  </g>
+  
+  <!-- 边角装饰元素 -->
+  <g stroke="#00d4ff" stroke-width="2" fill="none" opacity="0.2">
+    <!-- 左上角 -->
+    <path d="M60,60 L60,100 M60,60 L100,60"/>
+    <!-- 右上角 -->
+    <path d="M452,60 L452,100 M452,60 L412,60"/>
+    <!-- 左下角 -->
+    <path d="M60,452 L60,412 M60,452 L100,452"/>
+    <!-- 右下角 -->
+    <path d="M452,452 L452,412 M452,452 L412,452"/>
+  </g>
+  
+  <!-- 微妙的光效 -->
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 应用光效到主要元素 -->
+  <style>
+    .glow-text { filter: url(#glow); }
+  </style>
+</svg>

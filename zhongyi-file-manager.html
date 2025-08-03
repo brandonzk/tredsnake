@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager - 文档管理系统</title>
+    <style>
+        :root {
+            /* Apple风格配色 */
+            --primary-color: #007AFF;
+            --secondary-color: #5856D6;
+            --accent-color: #FF9500;
+            --success-color: #34C759;
+            --warning-color: #FF9500;
+            --danger-color: #FF3B30;
+            --background-color: rgba(255, 255, 255, 0.95);
+            --surface-color: rgba(255, 255, 255, 0.8);
+            --text-color: #1D1D1F;
+            --text-secondary: #86868B;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --shadow-heavy: 0 8px 30px rgba(0, 0, 0, 0.2);
+            --border-radius: 12px;
+            --border-radius-large: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: var(--surface-color);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-light);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .nav-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .settings-btn {
+            padding: 8px 16px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-light);
+        }
+
+        .settings-btn:hover {
+            background: #e6850e;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* 设置面板样式 */
+        .settings-panel {
+            position: fixed;
+            top: 80px;
+            right: -400px;
+            width: 350px;
+            height: calc(100vh - 80px);
+            background: var(--background-color);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border-color);
+            padding: 24px;
+            transition: var(--transition);
+            z-index: 999;
+            overflow-y: auto;
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .settings-panel.show {
+            right: 0;
+        }
+
+        .settings-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--text-color);
+        }
+
+        .setting-group {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .setting-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .setting-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-small:first-child {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-small:first-child:hover {
+            background: #0056b3;
+        }
+
+        .btn-small:last-child {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-small:last-child:hover {
+            background: #d32f2f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--accent-color);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--accent-color), #ffed4e);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-color), #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            transition: var(--transition);
+            box-shadow: var(--shadow-light);
+        }
+
+        .card:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .file-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--background-color);
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+            color: var(--text-color);
+        }
+
+        .file-item:hover {
+            background: var(--surface-color);
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .file-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .file-name {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background: #ffed4e;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #0099cc;
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff3742;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent-color);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--accent-color);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .status-panel {
+            background: var(--primary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .status-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .status-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--success-color);
+        }
+
+        .notification.error {
+            background: var(--error-color);
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="zhongyi-intelligence-platform.html" class="nav-logo">
+                <div class="nav-logo-icon">AI</div>
+                <span class="nav-title">File Manager</span>
+            </a>
+            <div class="nav-actions">
+                <a href="zhongyi-intelligence-platform.html" class="nav-btn">返回主页</a>
+                <a href="zhongyi-products.html" class="nav-btn">产品中心</a>
+                <a href="insurance-assistant-standalone.html" class="nav-btn">AI助手</a>
+                <button class="settings-btn" onclick="toggleSettings()">⚙️ 设置</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 设置面板 -->
+    <div class="settings-panel" id="settingsPanel">
+        <h3 class="settings-title">页面设置</h3>
+        
+        <div class="setting-group">
+            <label class="setting-label">页面背景图片</label>
+            <div class="setting-hint">推荐分辨率：1920x1080px，支持JPG/PNG格式</div>
+            <input type="file" class="file-input" id="backgroundUpload" accept="image/*">
+            <div class="btn-group">
+                <button class="btn-small" onclick="uploadBackground()">上传背景</button>
+                <button class="btn-small" onclick="resetBackground()">重置背景</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>File Manager</h1>
+            <p>智能文档管理系统</p>
+        </div>
+
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: var(--surface-color);
+            border-radius: var(--border-radius-large);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-large);
+            padding: 24px;
+            backdrop-filter: blur(20px);
+            transition: var(--transition);
+            box-shadow: var(--shadow-light);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-heavy);
+            border-color: var(--primary-color);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .file-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: white;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .file-item:hover {
+            background: rgba(0, 122, 255, 0.05);
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .file-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .file-name {
+            font-size: 14px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #2e7d32;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+            transform: translateY(-1px);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background: rgba(0, 122, 255, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgba(0, 122, 255, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+        }
+
+        .status-panel {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 20px;
+            backdrop-filter: blur(20px);
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .status-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .status-value {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--success-color);
+        }
+
+        .notification.error {
+            background: var(--error-color);
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-content {
+                padding: 12px 16px;
+            }
+            
+            .nav-actions {
+                gap: 8px;
+            }
+            
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .settings-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">中</div>
+                <div class="logo-text">
+                    <h1>中意保险文件管理系统</h1>
+                    <p>基于ChatGPT的智能文档管理平台</p>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <a href="zhongyi-intelligence-platform.html" class="nav-btn">返回主页</a>
+                <a href="zhongyi-products.html" class="nav-btn">产品中心</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-grid">
+            <div class="card">
+                <h2 class="card-title">📁 本地文件管理</h2>
+                <div class="file-list" id="fileList">
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">MD</div>
+                            <span class="file-name">正在加载文件列表...</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="btn btn-primary" onclick="refreshFileList()">🔄 刷新列表</button>
+                    <button class="btn btn-success" onclick="uploadAllToDatabase()">☁️ 全部上传</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">☁️ 数据库管理</h2>
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📤</div>
+                    <h3>拖拽文件到此处或点击上传</h3>
+                    <p style="color: var(--text-secondary); margin-top: 10px;">支持 .md, .txt, .pdf 等格式</p>
+                    <input type="file" id="fileInput" multiple accept=".md,.txt,.pdf" style="display: none;">
+                </div>
+                
+                <div class="status-panel">
+                    <div class="status-item">
+                        <span class="status-label">数据库连接状态</span>
+                        <span class="status-value" id="dbStatus">🔴 未连接</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">已上传文件数</span>
+                        <span class="status-value" id="uploadCount">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">最后同步时间</span>
+                        <span class="status-value" id="lastSync">从未同步</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">🔧 批量操作</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <button class="btn btn-primary" onclick="batchRename()">📝 批量重命名</button>
+                <button class="btn btn-success" onclick="syncToCloud()">🌐 同步到云端</button>
+                <button class="btn btn-primary" onclick="exportData()">📊 导出数据</button>
+                <button class="btn btn-danger" onclick="clearDatabase()">🗑️ 清空数据库</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 重命名模态框 -->
+    <div id="renameModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">重命名文件</h3>
+                <button class="close-btn" onclick="closeModal('renameModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">原文件名</label>
+                <input type="text" class="form-input" id="originalName" readonly>
+            </div>
+            <div class="form-group">
+                <label class="form-label">新文件名</label>
+                <input type="text" class="form-input" id="newName" placeholder="输入新的文件名">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="confirmRename()">确认重命名</button>
+                <button class="btn" onclick="closeModal('renameModal')" style="background: var(--border-color); color: var(--text-primary);">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知组件 -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // 全局变量
+        let currentFiles = [];
+        let selectedFile = null;
+        let dbConnection = null;
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+        });
+
+        function initializeApp() {
+            refreshFileList();
+            checkDatabaseConnection();
+            loadUploadStats();
+        }
+
+        function setupEventListeners() {
+            // 文件拖拽上传
+            const uploadArea = document.querySelector('.upload-area');
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                handleFileUpload(e.dataTransfer.files);
+            });
+
+            // 文件选择
+            document.getElementById('fileInput').addEventListener('change', (e) => {
+                handleFileUpload(e.target.files);
+            });
+        }
+
+        // 刷新文件列表
+        async function refreshFileList() {
+            try {
+                showNotification('正在加载文件列表...', 'success');
+                
+                // 模拟API调用获取文件列表
+                const files = await fetchLocalFiles();
+                currentFiles = files;
+                renderFileList(files);
+                
+                showNotification('文件列表已更新', 'success');
+            } catch (error) {
+                showNotification('加载文件列表失败: ' + error.message, 'error');
+            }
+        }
+
+        // API基础URL
+        const API_BASE_URL = 'http://localhost:5001';
+
+        // API调用函数
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const url = `${API_BASE_URL}${endpoint}`;
+                const config = {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    ...options
+                };
+
+                if (config.body && typeof config.body === 'object') {
+                    config.body = JSON.stringify(config.body);
+                }
+
+                const response = await fetch(url, config);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('API调用失败:', error);
+                throw error;
+            }
+        }
+
+        // 获取本地文件
+        async function fetchLocalFiles() {
+            try {
+                const response = await apiCall('/api/files');
+                return response.files || [];
+            } catch (error) {
+                console.error('获取文件列表失败:', error);
+                // 返回模拟数据作为后备
+                return [
+                    { name: '001_中意悦享人生终身寿险.md', size: '15.2 KB', modified: '2024-01-15' },
+                    { name: '002_中意安康重大疾病保险.md', size: '18.7 KB', modified: '2024-01-15' },
+                    { name: '003_中意财富增值年金保险.md', size: '12.4 KB', modified: '2024-01-15' },
+                    { name: '004_终身寿险销售话术.md', size: '8.9 KB', modified: '2024-01-15' },
+                    { name: '005_重疾险销售话术.md', size: '9.2 KB', modified: '2024-01-15' },
+                    { name: '006_年金险销售话术.md', size: '7.8 KB', modified: '2024-01-15' },
+                    { name: '007_一生挚爱荣耀版.md', size: '16.3 KB', modified: '2024-01-15' },
+                    { name: '008_一生福康甄可选版.md', size: '14.8 KB', modified: '2024-01-15' },
+                    { name: '009_意心守护惠选版.md', size: '13.5 KB', modified: '2024-01-15' },
+                    { name: '010_乐优享百万医疗险.md', size: '11.7 KB', modified: '2024-01-15' },
+                    { name: '011_乐安馨.md', size: '10.2 KB', modified: '2024-01-15' },
+                    { name: '012_乐温馨儿童小病补充.md', size: '9.8 KB', modified: '2024-01-15' },
+                    { name: '013_悠然颐养个人养老金.md', size: '12.1 KB', modified: '2024-01-15' }
+                ];
+            }
+        }
+
+        // 渲染文件列表
+        function renderFileList(files) {
+            const fileList = document.getElementById('fileList');
+            
+            if (files.length === 0) {
+                fileList.innerHTML = `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">📁</div>
+                            <span class="file-name">暂无文件</span>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            fileList.innerHTML = files.map(file => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">MD</div>
+                        <div>
+                            <div class="file-name">${file.name}</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">${file.size} • ${file.modified}</div>
+                        </div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="btn btn-primary" onclick="renameFile('${file.name}')">重命名</button>
+                        <button class="btn btn-success" onclick="uploadFile('${file.name}')">上传</button>
+                        <button class="btn btn-danger" onclick="deleteFile('${file.name}')">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 重命名文件
+        function renameFile(fileName) {
+            selectedFile = fileName;
+            document.getElementById('originalName').value = fileName;
+            document.getElementById('newName').value = fileName;
+            document.getElementById('renameModal').style.display = 'block';
+        }
+
+        // 确认重命名
+        async function confirmRename() {
+            const newName = document.getElementById('newName').value.trim();
+            
+            if (!newName) {
+                showNotification('请输入新文件名', 'error');
+                return;
+            }
+
+            try {
+                // 这里应该调用后端API进行文件重命名
+                await renameFileAPI(selectedFile, newName);
+                
+                showNotification(`文件已重命名: ${selectedFile} → ${newName}`, 'success');
+                closeModal('renameModal');
+                refreshFileList();
+            } catch (error) {
+                showNotification('重命名失败: ' + error.message, 'error');
+            }
+        }
+
+        // 重命名文件API
+        async function renameFileAPI(oldName, newName) {
+            try {
+                const response = await apiCall('/api/files/rename', {
+                    method: 'POST',
+                    body: { old_name: oldName, new_name: newName }
+                });
+                return response;
+            } catch (error) {
+                console.error('重命名API调用失败:', error);
+                throw error;
+            }
+        }
+
+        // 上传单个文件
+        async function uploadFile(fileName) {
+            try {
+                showNotification(`正在上传 ${fileName}...`, 'success');
+                
+                // 这里应该调用后端API上传文件到数据库
+                await uploadFileToDatabase(fileName);
+                
+                showNotification(`${fileName} 上传成功`, 'success');
+                updateUploadStats();
+            } catch (error) {
+                showNotification(`上传失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 批量上传所有文件
+        async function uploadAllToDatabase() {
+            if (currentFiles.length === 0) {
+                showNotification('没有文件可上传', 'error');
+                return;
+            }
+
+            try {
+                showNotification(`正在批量上传 ${currentFiles.length} 个文件...`, 'success');
+                
+                for (const file of currentFiles) {
+                    await uploadFileToDatabase(file.name);
+                }
+                
+                showNotification(`成功上传 ${currentFiles.length} 个文件`, 'success');
+                updateUploadStats();
+            } catch (error) {
+                showNotification(`批量上传失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 上传文件到数据库
+        async function uploadFileToDatabase(fileName) {
+            try {
+                const response = await apiCall('/api/files/upload', {
+                    method: 'POST',
+                    body: { filename: fileName }
+                });
+                return response;
+            } catch (error) {
+                console.error('上传API调用失败:', error);
+                throw error;
+            }
+        }
+
+        // 处理文件上传
+        function handleFileUpload(files) {
+            Array.from(files).forEach(file => {
+                if (file.type === 'text/markdown' || file.name.endsWith('.md')) {
+                    uploadNewFile(file);
+                } else {
+                    showNotification(`不支持的文件格式: ${file.name}`, 'error');
+                }
+            });
+        }
+
+        // 上传新文件
+        async function uploadNewFile(file) {
+            try {
+                showNotification(`正在上传 ${file.name}...`, 'success');
+                
+                // 这里应该调用后端API上传新文件
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                // await fetch('/api/upload', { method: 'POST', body: formData });
+                
+                showNotification(`${file.name} 上传成功`, 'success');
+                refreshFileList();
+            } catch (error) {
+                showNotification(`上传失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 删除文件
+        async function deleteFile(fileName) {
+            if (!confirm(`确定要删除文件 "${fileName}" 吗？`)) {
+                return;
+            }
+
+            try {
+                // 这里应该调用后端API删除文件
+                await deleteFileAPI(fileName);
+                
+                showNotification(`${fileName} 已删除`, 'success');
+                refreshFileList();
+            } catch (error) {
+                showNotification(`删除失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 删除文件API
+        async function deleteFileAPI(fileName) {
+            try {
+                const response = await apiCall('/api/files/delete', {
+                    method: 'DELETE',
+                    body: { filename: fileName }
+                });
+                return response;
+            } catch (error) {
+                console.error('删除API调用失败:', error);
+                throw error;
+            }
+        }
+
+        // 批量重命名
+        function batchRename() {
+            showNotification('批量重命名功能开发中...', 'success');
+        }
+
+        // 同步到云端
+        async function syncToCloud() {
+            try {
+                showNotification('正在同步到云端...', 'success');
+                
+                // 模拟同步过程
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                showNotification('同步完成', 'success');
+                updateLastSyncTime();
+            } catch (error) {
+                showNotification(`同步失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 导出数据
+        function exportData() {
+            showNotification('正在导出数据...', 'success');
+            
+            // 模拟导出
+            setTimeout(() => {
+                const data = JSON.stringify(currentFiles, null, 2);
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'zhongyi-files-export.json';
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                showNotification('数据导出完成', 'success');
+            }, 1000);
+        }
+
+        // 清空数据库
+        async function clearDatabase() {
+            if (!confirm('确定要清空数据库吗？此操作不可恢复！')) {
+                return;
+            }
+
+            try {
+                showNotification('正在清空数据库...', 'success');
+                
+                const response = await apiCall('/api/database/clear', { method: 'DELETE' });
+                
+                showNotification(response.message || '数据库已清空', 'success');
+                updateUploadStats(true);
+                checkDatabaseConnection();
+            } catch (error) {
+                showNotification(`清空失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 检查数据库连接
+        async function checkDatabaseConnection() {
+            try {
+                const response = await apiCall('/api/database/status');
+                
+                if (response.connected) {
+                    document.getElementById('dbStatus').innerHTML = '🟢 已连接';
+                } else {
+                    document.getElementById('dbStatus').innerHTML = '🔴 未连接';
+                }
+            } catch (error) {
+                document.getElementById('dbStatus').innerHTML = '🔴 连接失败';
+                console.error('检查数据库连接失败:', error);
+            }
+        }
+
+        // 加载上传统计
+        function loadUploadStats() {
+            // 模拟加载统计数据
+            document.getElementById('uploadCount').textContent = '13';
+            document.getElementById('lastSync').textContent = '2024-01-15 14:30:25';
+        }
+
+        // 更新上传统计
+        function updateUploadStats(reset = false) {
+            if (reset) {
+                document.getElementById('uploadCount').textContent = '0';
+                document.getElementById('lastSync').textContent = '从未同步';
+            } else {
+                const current = parseInt(document.getElementById('uploadCount').textContent);
+                document.getElementById('uploadCount').textContent = (current + 1).toString();
+                updateLastSyncTime();
+            }
+        }
+
+        // 更新最后同步时间
+        function updateLastSyncTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('zh-CN');
+            document.getElementById('lastSync').textContent = timeString;
+        }
+
+        // 关闭模态框
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 显示通知
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

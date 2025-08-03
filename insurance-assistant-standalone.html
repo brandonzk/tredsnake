@@ -1,0 +1,2983 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Assistant - 智能保险顾问平台</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Apple风格配色 */
+            --primary-color: #007AFF;
+            --secondary-color: #5856D6;
+            --accent-color: #FF9500;
+            --success-color: #34C759;
+            --warning-color: #FF9500;
+            --danger-color: #FF3B30;
+            --background-color: rgba(255, 255, 255, 0.95);
+            --surface-color: rgba(255, 255, 255, 0.8);
+            --text-color: #1D1D1F;
+            --text-secondary: #86868B;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --shadow-heavy: 0 8px 30px rgba(0, 0, 0, 0.2);
+            --border-radius: 12px;
+            --border-radius-large: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: var(--surface-color);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-light);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .nav-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .settings-btn {
+            padding: 8px 16px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-light);
+        }
+
+        .settings-btn:hover {
+            background: #e6850e;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* 设置面板样式 */
+        .settings-panel {
+            position: fixed;
+            top: 80px;
+            right: -400px;
+            width: 350px;
+            height: calc(100vh - 80px);
+            background: var(--background-color);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border-color);
+            padding: 24px;
+            transition: var(--transition);
+            z-index: 999;
+            overflow-y: auto;
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .settings-panel.show {
+            right: 0;
+        }
+
+        .settings-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--text-color);
+        }
+
+        .setting-group {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .setting-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .setting-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-small:first-child {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-small:first-child:hover {
+            background: #0056b3;
+        }
+
+        .btn-small:last-child {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-small:last-child:hover {
+            background: #d32f2f;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header Styles */
+        .main-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .company-logo {
+            margin-bottom: 20px;
+        }
+        
+        .company-logo img {
+            height: 80px;
+            width: auto;
+        }
+        
+        .user-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .user-avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 4px solid var(--primary-color);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .user-avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-info h3 {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .user-info p {
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+        }
+        
+        .system-title {
+            color: var(--primary-color) !important;
+            font-weight: 600;
+        }
+        
+        .settings-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .settings-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* Full Screen Banner Background */
+        .hero-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -2;
+            background: linear-gradient(
+                135deg,
+                rgba(0, 0, 0, 0.8) 0%,
+                rgba(0, 17, 34, 0.6) 50%,
+                rgba(0, 0, 0, 0.7) 100%
+            ),
+            url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"%3E%3Cdefs%3E%3ClinearGradient id="seaBg" x1="0%25" y1="0%25" x2="0%25" y2="100%25"%3E%3Cstop offset="0%25" style="stop-color:%23000000;stop-opacity:1" /%3E%3Cstop offset="50%25" style="stop-color:%23001122;stop-opacity:1" /%3E%3Cstop offset="100%25" style="stop-color:%23000000;stop-opacity:1" /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="1920" height="1080" fill="url(%23seaBg)"/%3E%3Cg transform="translate(960,400)" opacity="0.2"%3E%3Crect x="-300" y="-80" width="600" height="120" fill="%23333333" rx="15"/%3E%3Crect x="-200" y="-180" width="400" height="100" fill="%23444444" rx="12"/%3E%3Crect x="-30" y="-260" width="60" height="80" fill="%23555555"/%3E%3Ccircle cx="0" cy="-300" r="20" fill="%23666666"/%3E%3Crect x="-270" y="40" width="20" height="200" fill="%23333333"/%3E%3Crect x="-120" y="40" width="20" height="200" fill="%23333333"/%3E%3Crect x="120" y="40" width="20" height="200" fill="%23333333"/%3E%3Crect x="270" y="40" width="20" height="200" fill="%23333333"/%3E%3C/g%3E%3Cg stroke="%23dc143c" stroke-width="2" fill="none" opacity="0.15"%3E%3Cpath d="M0,800 Q480,780 960,800 Q1440,820 1920,800" stroke-dasharray="15,10"/%3E%3Cpath d="M0,850 Q480,830 960,850 Q1440,870 1920,850" stroke-dasharray="12,12"/%3E%3Cpath d="M0,900 Q480,880 960,900 Q1440,920 1920,900" stroke-dasharray="8,15"/%3E%3C/g%3E%3C/svg%3E');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Panel Styles */
+        .panel {
+            background: linear-gradient(135deg, rgba(26, 15, 15, 0.95) 0%, rgba(13, 7, 7, 0.98) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: 25px;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+        
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-color);
+        }
+        
+        .panel-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .panel-header.horizontal {
+            flex-direction: row;
+            gap: 10px;
+        }
+        
+        .panel-header.horizontal h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        .panel-header.horizontal p {
+            font-size: 0.85rem;
+            margin: 0;
+            line-height: 1.3;
+        }
+        
+        .panel-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+        
+        .panel h3 {
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+        
+        .panel p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        textarea, input[type="text"], input[type="password"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: var(--surface-color);
+            color: var(--text-color);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        
+        textarea:focus, input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.1);
+        }
+        
+        .fixed-textarea {
+            height: 200px;
+            resize: none;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary-gradient);
+            color: white;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--surface-color);
+            color: var(--text-color);
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background: var(--background-color);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        /* Results */
+        .result-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(26, 15, 15, 0.5);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .result-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(220, 20, 60, 0.3);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: var(--transition);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: var(--success-gradient);
+        }
+        
+        .notification.error {
+            background: var(--danger-color);
+        }
+        
+        .notification.info {
+            background: var(--primary-gradient);
+        }
+        
+        /* Settings Panel */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 30px;
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .settings-panel.open {
+            right: 0;
+        }
+        
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* AI对话界面样式 */
+        .ai-chat-container {
+            margin-top: 15px;
+        }
+        
+        .chat-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 10px 15px;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: var(--bg-secondary);
+        }
+        
+        .system-message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        
+        .user-message, .ai-message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 12px;
+            max-width: 85%;
+        }
+        
+        .user-message {
+            background: var(--primary-color);
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .ai-message {
+            background: var(--panel-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .chat-input-container {
+            margin-top: 15px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            outline: none;
+        }
+        
+        .chat-input:focus {
+            border-color: var(--primary-color);
+        }
+        
+        .quick-prompts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .quick-btn {
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .preset-scripts {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .script-category {
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .script-category h4 {
+            margin: 0 0 10px 0;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .script-btn {
+            width: 100%;
+            padding: 10px 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .script-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--text-light);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            30% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .main-header {
+                text-align: center;
+            }
+            
+            .user-avatar-large {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .carousel-slide {
+                height: 200px;
+            }
+            
+            .settings-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="zhongyi-intelligence-platform.html" class="nav-logo">
+                <div class="nav-logo-icon">AI</div>
+                <span class="nav-title">Insurance Assistant</span>
+            </a>
+            <div class="nav-actions">
+                <a href="zhongyi-intelligence-platform.html" class="nav-btn">返回主页</a>
+                <a href="zhongyi-products.html" class="nav-btn">产品中心</a>
+                <a href="zhongyi-file-manager.html" class="nav-btn">文件管理</a>
+                <button class="settings-btn" onclick="toggleSettings()">⚙️ 设置</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 设置面板 -->
+    <div class="settings-panel" id="settingsPanel">
+        <h3 class="settings-title">页面设置</h3>
+        
+        <div class="setting-group">
+            <label class="setting-label">背景图片</label>
+            <div class="setting-hint">上传自定义背景图片，支持 JPG、PNG 格式</div>
+            <input type="file" class="file-input" id="backgroundUpload" accept="image/*">
+            <div class="btn-group">
+                <button class="btn-small" onclick="uploadBackground()">应用背景</button>
+                <button class="btn-small" onclick="resetBackground()">重置背景</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Header Section -->
+        <header class="main-header">
+            <div class="system-title-center">
+                <h2 style="color: #00d4ff; margin: 0; font-size: 1.8rem; font-weight: 600;">Insurance Assistant</h2>
+                <p style="color: var(--text-secondary); margin: 5px 0 0 0; font-size: 1rem;">智能保险顾问，让专业服务触手可及</p>
+            </div>
+        </header>
+
+
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Customer Chat Analysis Panel -->
+            <div class="panel">
+                <div class="panel-header horizontal">
+                    <i class="panel-icon fas fa-comments"></i>
+                    <div>
+                        <h3>客户对话分析</h3>
+                        <p>智能分析客户需求和意向</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="chatInput">粘贴客户对话内容:</label>
+                    <textarea id="chatInput" class="fixed-textarea" placeholder="请粘贴与客户的对话记录，系统将自动分析客户的保险需求、风险偏好和购买意向..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button id="analyzeBtn" class="btn btn-primary">
+                        <i class="fas fa-search"></i> 分析对话
+                    </button>
+                    <button id="clearBtn" class="btn btn-secondary">
+                        <i class="fas fa-trash"></i> 清空
+                    </button>
+                </div>
+                <div id="analysisResult" class="result-section" style="display: none;"></div>
+            </div>
+
+            <!-- Customer Information Panel -->
+            <div class="panel">
+                <div class="panel-header horizontal">
+                    <i class="panel-icon fas fa-user-circle"></i>
+                    <div>
+                        <h3>客户资料录入</h3>
+                        <p>完整客户信息采集与标签生成</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerInfo">客户基本信息:</label>
+                    <textarea id="customerInfo" class="fixed-textarea" placeholder="请输入客户基本信息：年龄、职业、收入、家庭状况、风险偏好等..." style="height: 120px;"></textarea>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="generateTagsBtn" class="btn btn-primary">
+                        <i class="fas fa-tags"></i> 生成客户标签
+                    </button>
+                    <button id="clearCustomerBtn" class="btn btn-secondary">
+                        <i class="fas fa-eraser"></i> 清空
+                    </button>
+                </div>
+                
+                <div id="customerTags" class="result-section" style="display: none;"></div>
+            </div>
+
+            <!-- Needs Analysis Panel -->
+            <div class="panel">
+                <div class="panel-header horizontal">
+                    <i class="panel-icon fas fa-search"></i>
+                    <div>
+                        <h3>需求分析</h3>
+                        <p>基于客户标签的深度需求挖掘</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerChat">客户聊天记录:</label>
+                    <textarea id="customerChat" class="fixed-textarea" placeholder="请输入与客户的聊天记录或沟通内容..." style="height: 120px;"></textarea>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="analyzeNeedsBtn" class="btn btn-primary">
+                        <i class="fas fa-search"></i> 分析需求
+                    </button>
+                    <button id="clearChatBtn" class="btn btn-secondary">
+                        <i class="fas fa-eraser"></i> 清空
+                    </button>
+                </div>
+                
+                <div id="needsAnalysis" class="result-section" style="display: none;"></div>
+            </div>
+            
+            <!-- Product Matching Panel -->
+            <div class="panel">
+                <div class="panel-header horizontal">
+                    <i class="panel-icon fas fa-puzzle-piece"></i>
+                    <div>
+                        <h3>产品匹配</h3>
+                        <p>智能产品匹配与话术生成</p>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="matchProductsBtn" class="btn btn-primary">
+                        <i class="fas fa-puzzle-piece"></i> 匹配产品
+                    </button>
+                    <button id="generateScriptBtn" class="btn btn-success">
+                        <i class="fas fa-comments"></i> 生成话术
+                    </button>
+                </div>
+                
+                <div id="productMatching" class="result-section" style="display: none;"></div>
+                <div id="salesScriptGenerated" class="result-section" style="display: none;"></div>
+            </div>
+
+            <!-- AI Intelligent Chat Panel -->
+            <div class="panel">
+                <div class="panel-header horizontal">
+                    <i class="panel-icon fas fa-robot"></i>
+                    <div>
+                        <h3>AI智能对话</h3>
+                        <p>基于完整分析的智能销售助手</p>
+                    </div>
+                </div>
+                
+                <div class="analysis-status" id="analysisStatus" style="margin-bottom: 15px; padding: 10px; background: rgba(255,193,7,0.1); border-left: 3px solid #ffc107; border-radius: 4px;">
+                    <p style="margin: 0; color: #ffc107; font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> 请先完成客户资料录入、需求分析和产品匹配，再开始AI对话
+                    </p>
+                </div>
+                
+                <!-- AI对话区域 -->
+                <div class="ai-chat-container">
+                    <div class="chat-tabs">
+                        <button class="tab-btn active" data-tab="chat">AI实时对话</button>
+                        <button class="tab-btn" data-tab="preset">文档管理</button>
+                    </div>
+                    
+                    <!-- AI实时对话 -->
+                    <div id="chatTab" class="tab-content active">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="system-message">
+                                <i class="fas fa-robot"></i>
+                                <span>AI销售助手等待中，请先完成客户分析流程</span>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <div class="input-group">
+                                <textarea id="aiChatInput" placeholder="完成分析后，输入您的问题或销售场景..." class="chat-input" rows="3" style="resize: vertical; min-height: 60px; border-radius: 12px; padding: 15px;" disabled></textarea>
+                                <button id="sendChatBtn" class="btn btn-primary" style="align-self: flex-end; height: 60px; min-width: 60px;" disabled>
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div class="quick-prompts">
+                                <button class="quick-btn" data-prompt="客户说单位已经有保险了，我该怎么回应？" disabled>单位有保险异议</button>
+                                <button class="quick-btn" data-prompt="如何向石油系统员工介绍重疾险的必要性？" disabled>重疾险介绍</button>
+                                <button class="quick-btn" data-prompt="客户觉得保费太贵，怎么处理这个异议？" disabled>保费异议处理</button>
+                                <button class="quick-btn" data-prompt="如何利用同事案例来促成成交？" disabled>同事案例成交</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 文档管理 -->
+                    <div id="presetTab" class="tab-content">
+                        <div class="file-management-link">
+                            <div style="text-align: center; padding: 40px 20px;">
+                                <i class="fas fa-folder-open" style="font-size: 3rem; color: #00d4ff; margin-bottom: 20px;"></i>
+                                <h4 style="color: var(--text-white); margin-bottom: 15px;">智能文档管理系统</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 25px;">管理产品资料、适配人群和销售话术文档</p>
+                                <button class="btn btn-primary" onclick="window.open('zhongyi-file-manager.html', '_blank')" style="padding: 12px 30px; font-size: 1.1rem;">
+                                    <i class="fas fa-external-link-alt"></i> 打开文档管理
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="salesScript" class="result-section" style="display: none;"></div>
+                <button id="copyScriptBtn" class="btn btn-primary" style="display: none; margin-top: 15px;">
+                    <i class="fas fa-copy"></i> 复制内容
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading">
+            <div class="spinner"></div>
+            <p>AI正在分析中，请稍候...</p>
+        </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div id="settingsPanel" class="settings-panel">
+        <div class="settings-header">
+            <h3>系统设置</h3>
+            <button id="closeSettings" class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="form-group">
+            <label for="apiKeyInput">DeepSeek API Key:</label>
+            <input type="password" id="apiKeyInput" placeholder="请输入您的API密钥">
+        </div>
+        
+        <div class="form-group">
+            <label for="salesStyleSelect">销售风格:</label>
+            <select id="salesStyleSelect">
+                <option value="professional">专业型</option>
+                <option value="friendly">亲和型</option>
+                <option value="consultative">顾问型</option>
+                <option value="direct">直接型</option>
+            </select>
+        </div>
+        
+        <div class="btn-group">
+            <button id="saveSettingsBtn" class="btn btn-primary">保存设置</button>
+            <button id="resetSettingsBtn" class="btn btn-secondary">重置设置</button>
+        </div>
+    </div>
+
+    <script>
+        class InsuranceAssistant {
+            constructor() {
+                this.apiKey = localStorage.getItem('deepseek_api_key') || 'sk-d3b271ed56894ec09de13f4d6a5737e2';
+                this.salesStyle = localStorage.getItem('sales_style') || 'professional';
+                this.uploadedFiles = [];
+                this.productKnowledge = '';
+                
+                this.initializeEventListeners();
+                this.loadSettings();
+                this.loadProductKnowledge();
+                this.initializeUI();
+                this.initializeCarousel();
+                this.initializeChatTabs();
+            }
+            
+            initializeEventListeners() {
+                // 客户标签生成按钮
+                const generateTagsBtn = document.getElementById('generateTagsBtn');
+                if (generateTagsBtn) {
+                    generateTagsBtn.addEventListener('click', () => {
+                        this.generateCustomerTags();
+                    });
+                }
+                
+                // 清空客户信息按钮
+                const clearCustomerBtn = document.getElementById('clearCustomerBtn');
+                if (clearCustomerBtn) {
+                    clearCustomerBtn.addEventListener('click', () => {
+                        const customerInfo = document.getElementById('customerInfo');
+                        if (customerInfo) customerInfo.value = '';
+                        this.hideElement('customerTags');
+                        this.resetAnalysisFlow();
+                    });
+                }
+                
+                // 需求分析按钮
+                const analyzeNeedsBtn = document.getElementById('analyzeNeedsBtn');
+                if (analyzeNeedsBtn) {
+                    analyzeNeedsBtn.addEventListener('click', () => {
+                        this.analyzeCustomerNeeds();
+                    });
+                }
+                
+                // 清空聊天记录按钮
+                const clearChatBtn = document.getElementById('clearChatBtn');
+                if (clearChatBtn) {
+                    clearChatBtn.addEventListener('click', () => {
+                        const customerChat = document.getElementById('customerChat');
+                        if (customerChat) customerChat.value = '';
+                        this.hideElement('needsAnalysis');
+                        this.resetProductMatching();
+                    });
+                }
+                
+                // 产品匹配按钮
+                const matchProductsBtn = document.getElementById('matchProductsBtn');
+                if (matchProductsBtn) {
+                    matchProductsBtn.addEventListener('click', () => {
+                        this.matchProducts();
+                    });
+                }
+                
+                // 生成话术按钮
+                const generateScriptBtn = document.getElementById('generateScriptBtn');
+                if (generateScriptBtn) {
+                    generateScriptBtn.addEventListener('click', () => {
+                        this.generateSalesScript();
+                    });
+                }
+                
+                // AI聊天发送按钮
+                const sendChatBtn = document.getElementById('sendChatBtn');
+                if (sendChatBtn) {
+                    sendChatBtn.addEventListener('click', () => {
+                        this.sendAIChat();
+                    });
+                }
+                
+                // AI聊天输入框回车事件
+                const aiChatInput = document.getElementById('aiChatInput');
+                if (aiChatInput) {
+                    aiChatInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            this.sendAIChat();
+                        }
+                    });
+                }
+                
+                // 初始化分析流程状态
+                this.analysisState = {
+                    customerTagsGenerated: false,
+                    needsAnalyzed: false,
+                    productsMatched: false,
+                    scriptGenerated: false
+                };
+                
+                this.customerData = {};
+                this.needsData = {};
+                this.productData = {};
+                this.scriptData = {};
+                
+                // 关闭设置面板
+                const closeSettings = document.getElementById('closeSettings');
+                if (closeSettings) {
+                    closeSettings.addEventListener('click', () => {
+                        const settingsPanel = document.getElementById('settingsPanel');
+                        if (settingsPanel) settingsPanel.classList.remove('open');
+                    });
+                }
+                
+                // 保存设置按钮
+                const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+                if (saveSettingsBtn) {
+                    saveSettingsBtn.addEventListener('click', () => {
+                        this.saveSettings();
+                    });
+                }
+
+                // 重置设置按钮
+                const resetSettingsBtn = document.getElementById('resetSettingsBtn');
+                if (resetSettingsBtn) {
+                    resetSettingsBtn.addEventListener('click', () => {
+                        this.resetSettings();
+                    });
+                }
+                
+                // 复制话术
+                const copyScriptBtn = document.getElementById('copyScriptBtn');
+                if (copyScriptBtn) {
+                    copyScriptBtn.addEventListener('click', () => {
+                        this.copySalesScript();
+                    });
+                }
+            }
+            
+            initializeUI() {
+                this.addAnimationEffects();
+            }
+
+            addAnimationEffects() {
+                const panels = document.querySelectorAll('.panel');
+                panels.forEach((panel, index) => {
+                    panel.style.animationDelay = `${index * 0.1}s`;
+                });
+            }
+            
+            loadSettings() {
+                const apiKeyInput = document.getElementById('apiKeyInput');
+                const salesStyleSelect = document.getElementById('salesStyleSelect');
+                if (apiKeyInput) apiKeyInput.value = this.apiKey;
+                if (salesStyleSelect) salesStyleSelect.value = this.salesStyle;
+            }
+            
+            saveSettings() {
+                const apiKeyInput = document.getElementById('apiKeyInput');
+                const salesStyleSelect = document.getElementById('salesStyleSelect');
+                
+                if (apiKeyInput) {
+                    this.apiKey = apiKeyInput.value;
+                    localStorage.setItem('deepseek_api_key', this.apiKey);
+                }
+                if (salesStyleSelect) {
+                    this.salesStyle = salesStyleSelect.value;
+                    localStorage.setItem('sales_style', this.salesStyle);
+                }
+                
+                this.showNotification('设置已保存', 'success');
+            }
+
+            resetSettings() {
+                localStorage.removeItem('deepseek_api_key');
+                localStorage.removeItem('sales_style');
+                
+                this.apiKey = 'sk-d3b271ed56894ec09de13f4d6a5737e2';
+                this.salesStyle = 'professional';
+                
+                const apiKeyInput = document.getElementById('apiKeyInput');
+                const salesStyleSelect = document.getElementById('salesStyleSelect');
+                if (apiKeyInput) apiKeyInput.value = this.apiKey;
+                if (salesStyleSelect) salesStyleSelect.value = this.salesStyle;
+                
+                this.showNotification('设置已重置', 'info');
+            }
+            
+            async loadProductKnowledge() {
+                // 从固定的产品知识库文件中加载产品信息
+                this.productKnowledge = `
+                中意人寿固定产品知识库（严格限制仅限以下7款主推产品）：
+                
+                1. 一生挚爱荣耀版（终身寿险）
+                - 产品特色：终身寿险保障，爱的传承；荣耀版专享权益，尊贵体验；保额递增设计，抵御通胀；灵活缴费方式，减轻压力；保单贷款功能，资金周转
+                - 适用人群：25-65岁健康人群，有财富传承需求的家庭，追求稳健保障的客户，注重品牌价值的高端客户
+                - 保险责任：身故保险金、全残保险金、保额递增、荣耀版专享服务
+                - 缴费方式：趸交、3年交、5年交、10年交、20年交、30年交
+                - 投保示例：35岁男性，基本保额100万，20年交，年缴保费约4.8万元
+                
+                2. 一生福康甄可选版（重大疾病保险）
+                - 产品特色：重大疾病保险，健康守护；甄可选版含轻症+重症双重保障；不可选版专注重症保障；轻症豁免保费功能；多次赔付设计
+                - 适用人群：18-65岁健康人群，注重健康保障的家庭，有重疾风险意识的客户，追求全面保障的人群
+                - 保险责任：甄可选版（120种重疾+60种轻症+轻症豁免+身故保险金）；不可选版（120种重疾+身故保险金，保费更优惠）
+                - 缴费方式：10年交、15年交、20年交、30年交、缴至60岁、缴至65岁
+                - 投保示例：甄可选版30岁女性50万保额20年交约8500元；不可选版约6800元
+                
+                3. 意心守护惠选版（定期寿险）
+                - 产品特色：定期寿险保障，经济实惠；惠选版专享优惠费率；高保额低保费设计；免体检额度高；核保简单快速
+                - 适用人群：18-60岁健康人群，家庭经济支柱，有房贷车贷的人群，预算有限但需要高保额的客户
+                - 保险责任：身故保险金、全残保险金、意外身故额外给付50%
+                - 缴费方式：5年交、10年交、15年交、20年交、30年交、缴至60岁
+                - 投保示例：30岁男性200万保额保至60岁20年交约2400元
+                
+                4. 乐优享（百万医疗险）
+                - 产品特色：百万医疗保障，安心就医；0免赔额设计；不限社保用药；特需医疗覆盖；绿色就医通道
+                - 适用人群：0-65岁健康人群，注重医疗保障的家庭，希望享受高端医疗的客户，补充社保不足的人群
+                - 保险责任：一般医疗600万、重疾医疗600万、特需医疗300万、质子重离子600万、住院津贴200元/天
+                - 缴费方式：年缴，保证续保20年
+                - 投保示例：30岁成人年缴约300-500元，0岁婴儿约600-800元
+                
+                5. 乐安馨（综合意外险）
+                - 产品特色：综合意外保险，全面守护；24小时意外保障；意外医疗保障；意外住院津贴；交通意外额外保障
+                - 适用人群：18-65岁健康人群，经常出行的商务人士，从事一般职业的人群，注重意外保障的家庭
+                - 保险责任：意外身故、意外伤残、意外医疗5万、意外住院津贴100元/天、交通意外额外给付100%
+                - 缴费方式：年缴，保障期间1年，可续保至70岁
+                - 投保示例：30岁成人50万保额年缴约200-300元
+                
+                6. 乐温馨（儿童小病补充报销）
+                - 产品特色：儿童专属医疗保险；小病门诊补充报销；A款（有社保）B款（无社保）；0免赔额设计；报销比例高
+                - 适用人群：0-17岁儿童，有社保的儿童（A款），无社保的儿童（B款），经常生病的儿童，注重儿童健康的家庭
+                - 保险责任：A款（门诊2万90%报销+住院10万100%报销）；B款（门诊1.5万70%报销+住院8万80%报销）
+                - 缴费方式：年缴，保障期间1年，可续保至18岁
+                - 投保示例：A款3岁儿童约400元，B款约800元
+                
+                7. 悠然颐养（个人养老金类）
+                - 产品特色：个人养老金专属产品；享受税收优惠政策；稳健增值收益；灵活领取方式；终身领取保证
+                - 适用人群：16-45岁在职人员，有个人养老金账户的客户，追求稳健养老规划的人群，希望享受税优政策的客户
+                - 保险责任：养老年金60岁开始按月领取、身故保险金、全残保险金、保证领取20年
+                - 缴费方式：年缴1000-12000元、月缴100-1000元、不定期缴费
+                - 投保示例：30岁客户年缴12000元缴费30年，60岁开始每月领取约1200元
+                
+                严格限制：产品推荐、分析、调用、回答等必须严格限制在以上7款产品范围内，绝对不得推荐、提及或分析其他任何保险产品！
+                `;
+        document.head.appendChild(style);
+    }
+
+    // 设置面板功能
+    function toggleSettings() {
+        const panel = document.getElementById('settingsPanel');
+        panel.classList.toggle('show');
+    }
+
+    // 点击外部关闭设置面板
+    document.addEventListener('click', function(event) {
+        const panel = document.getElementById('settingsPanel');
+        const settingsBtn = document.querySelector('.settings-btn');
+        
+        if (!panel.contains(event.target) && !settingsBtn.contains(event.target)) {
+            panel.classList.remove('show');
+        }
+    });
+
+    // 背景图片上传
+    function uploadBackground() {
+        const fileInput = document.getElementById('backgroundUpload');
+        const file = fileInput.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageUrl = e.target.result;
+                document.body.style.backgroundImage = 'url(' + imageUrl + ')';
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                document.body.style.backgroundRepeat = 'no-repeat';
+                
+                // 保存到本地存储
+                localStorage.setItem('customBackground', imageUrl);
+                
+                alert('背景已更新！');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert('请先选择一张图片');
+        }
+    }
+
+    // 重置背景
+    function resetBackground() {
+        document.body.style.backgroundImage = '';
+        document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        document.body.style.backgroundAttachment = 'fixed';
+        
+        // 清除本地存储
+        localStorage.removeItem('customBackground');
+        
+        // 清空文件输入
+        document.getElementById('backgroundUpload').value = '';
+        
+        alert('背景已重置！');
+    }
+
+    // 页面加载时恢复背景设置
+    window.addEventListener('load', function() {
+        const savedBackground = localStorage.getItem('customBackground');
+        if (savedBackground) {
+            document.body.style.backgroundImage = 'url(' + savedBackground + ')';
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+            document.body.style.backgroundRepeat = 'no-repeat';
+        }
+    });
+
+    // 原有的样式注入代码
+    function injectStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            /* 这里应该只包含CSS样式 */
+        `;
+        document.head.appendChild(style);
+    }
+
+    // 添加新的方法到InsuranceAssistant类
+        InsuranceAssistant.prototype.displayCustomerTags = function(data) {
+            const resultDiv = document.getElementById('customerResult');
+            resultDiv.innerHTML = `
+                <div class="analysis-result">
+                    <h4>客户标签生成结果</h4>
+                    <div class="tags-display">
+                        ${Object.entries(data).map(([key, value]) => `
+                            <div class="tag-category">
+                                <strong>${key}:</strong> ${Array.isArray(value) ? value.join(', ') : value}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        };
+        
+        InsuranceAssistant.prototype.displayNeedsAnalysis = function(data) {
+            const resultDiv = document.getElementById('needsResult');
+            resultDiv.innerHTML = `
+                <div class="analysis-result">
+                    <h4>需求分析结果</h4>
+                    <div class="needs-display">
+                        ${Object.entries(data).map(([key, value]) => `
+                            <div class="need-category">
+                                <strong>${key}:</strong> 
+                                ${Array.isArray(value) ? 
+                                    `<ul>${value.map(item => `<li>${item}</li>`).join('')}</ul>` : 
+                                    value
+                                }
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        };
+        
+        InsuranceAssistant.prototype.displayProductMatching = function(data) {
+            const resultDiv = document.getElementById('productResult');
+            resultDiv.innerHTML = `
+                <div class="analysis-result">
+                    <h4>产品匹配结果</h4>
+                    <div class="products-display">
+                        ${data.recommendations ? data.recommendations.map(product => `
+                            <div class="product-match">
+                                <h5>${product.productName}</h5>
+                                <p><strong>匹配度:</strong> ${product.matchScore}%</p>
+                                <p><strong>推荐理由:</strong> ${product.reason}</p>
+                                <p><strong>建议保额:</strong> ${product.suggestedAmount || product.suggestedCoverage}</p>
+                                <p><strong>预估保费:</strong> ${product.estimatedPremium}</p>
+                            </div>
+                        `).join('') : '暂无匹配产品'}
+                    </div>
+                </div>
+            `;
+        };
+        
+        InsuranceAssistant.prototype.displaySalesScriptGenerated = function(data) {
+            const resultDiv = document.getElementById('scriptResult');
+            resultDiv.innerHTML = `
+                <div class="analysis-result">
+                    <h4>销售话术生成结果</h4>
+                    <div class="script-display">
+                        ${Object.entries(data).map(([key, value]) => `
+                            <div class="script-section">
+                                <h5>${key}</h5>
+                                <p>${value}</p>
+                                <button onclick="insuranceAssistant.copyToClipboard('${value.replace(/'/g, "\\'")}')">复制话术</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        };
+        
+        InsuranceAssistant.prototype.updateAnalysisStatus = function() {
+            const statusDiv = document.getElementById('analysisStatus');
+            const steps = [
+                { key: 'customerTagsGenerated', label: '客户标签生成' },
+                { key: 'needsAnalyzed', label: '需求分析' },
+                { key: 'productsMatched', label: '产品匹配' },
+                { key: 'scriptGenerated', label: '话术生成' }
+            ];
+            
+            statusDiv.innerHTML = `
+                <div class="status-display">
+                    <h4>分析进度</h4>
+                    ${steps.map(step => `
+                        <div class="status-item ${this.analysisState[step.key] ? 'completed' : 'pending'}">
+                            <span class="status-icon">${this.analysisState[step.key] ? '✓' : '○'}</span>
+                            <span class="status-label">${step.label}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        };
+        
+        InsuranceAssistant.prototype.enableAIChat = function() {
+            const chatInput = document.getElementById('aiChatInput');
+            const sendButton = document.getElementById('sendAIChat');
+            const statusText = document.getElementById('aiChatStatus');
+            
+            if (chatInput) chatInput.disabled = false;
+            if (sendButton) sendButton.disabled = false;
+            if (statusText) {
+                statusText.textContent = '所有分析已完成，可以开始AI对话';
+                statusText.style.color = '#4CAF50';
+            }
+        };
+        
+        InsuranceAssistant.prototype.clearCustomerInfo = function() {
+            document.getElementById('customerInfo').value = '';
+            document.getElementById('customerResult').innerHTML = '';
+            this.customerData = null;
+            this.analysisState.customerTagsGenerated = false;
+            this.updateAnalysisStatus();
+        };
+        
+        InsuranceAssistant.prototype.clearChatRecord = function() {
+             document.getElementById('customerChat').value = '';
+             document.getElementById('needsResult').innerHTML = '';
+             this.needsData = null;
+             this.analysisState.needsAnalyzed = false;
+             this.updateAnalysisStatus();
+         };
+         
+         // AI聊天功能
+         InsuranceAssistant.prototype.sendAIMessage = async function() {
+             if (!this.analysisState.scriptGenerated) {
+                 this.showNotification('请先完成完整的客户分析流程', 'error');
+                 return;
+             }
+             
+             const chatInput = document.getElementById('aiChatInput');
+             const message = chatInput.value.trim();
+             
+             if (!message) {
+                 this.showNotification('请输入消息内容', 'error');
+                 return;
+             }
+             
+             // 添加用户消息到聊天区域
+             this.addChatMessage('user', message);
+             chatInput.value = '';
+             
+             // 显示AI正在思考
+             this.addChatMessage('ai', '正在思考中...', true);
+             
+             try {
+                 const prompt = `
+                 你是中意赵珂保险AI智能引擎，基于之前的完整客户分析，请回答客户的问题：
+                 
+                 客户标签：${JSON.stringify(this.customerData)}
+                 需求分析：${JSON.stringify(this.needsData)}
+                 产品匹配：${JSON.stringify(this.productData)}
+                 销售话术：${JSON.stringify(this.scriptData)}
+                 
+                 客户问题：${message}
+                 
+                 请基于以上分析结果，用自然、专业、亲切的语言回答客户问题。
+                 注意：
+                 1. 只能推荐已匹配的产品
+                 2. 回答要结合客户的具体情况
+                 3. 语言要自然，不要过于正式
+                 4. 如果涉及具体条款，要提醒客户以正式条款为准
+                 `;
+                 
+                 const response = await this.callDeepSeekAPI(prompt);
+                 
+                 // 移除"正在思考"消息并添加AI回复
+                 this.removeTempMessage();
+                 this.addChatMessage('ai', response);
+                 
+             } catch (error) {
+                 console.error('AI聊天失败:', error);
+                 this.removeTempMessage();
+                 this.addChatMessage('ai', '抱歉，我现在无法回答您的问题，请稍后再试。');
+             }
+         };
+         
+         InsuranceAssistant.prototype.addChatMessage = function(sender, message, isTemp = false) {
+             const chatMessages = document.getElementById('aiChatMessages');
+             const messageDiv = document.createElement('div');
+             messageDiv.className = `chat-message ${sender}-message ${isTemp ? 'temp-message' : ''}`;
+             messageDiv.innerHTML = `
+                 <div class="message-content">
+                     <strong>${sender === 'user' ? '您' : 'AI助手'}:</strong>
+                     <p>${message}</p>
+                 </div>
+                 <div class="message-time">${new Date().toLocaleTimeString()}</div>
+             `;
+             
+             chatMessages.appendChild(messageDiv);
+             chatMessages.scrollTop = chatMessages.scrollHeight;
+         };
+         
+         InsuranceAssistant.prototype.removeTempMessage = function() {
+             const tempMessage = document.querySelector('.temp-message');
+             if (tempMessage) {
+                 tempMessage.remove();
+             }
+         };
+        
+        InsuranceAssistant.prototype.handleFileUpload = function(e) {
+                const files = e.target.files || e.dataTransfer.files;
+                for (let file of files) {
+                    if (file.size > 10 * 1024 * 1024) {
+                        this.showNotification('文件大小不能超过10MB', 'error');
+                        continue;
+                    }
+                    this.uploadedFiles.push(file);
+                    this.displayUploadedFile(file);
+                }
+        };
+        
+        InsuranceAssistant.prototype.displayUploadedFile = function(file) {
+                const uploadedFilesDiv = document.getElementById('uploadedFiles');
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'uploaded-file';
+                fileDiv.innerHTML = `
+                    <i class="fas fa-file"></i>
+                    <span>${file.name}</span>
+                    <span class="file-size">(${(file.size / 1024).toFixed(1)} KB)</span>
+                `;
+                uploadedFilesDiv.appendChild(fileDiv);
+        };
+        
+        InsuranceAssistant.prototype.generateCustomerTags = async function() {
+                const customerInfo = document.getElementById('customerInfo');
+                const content = customerInfo.value.trim();
+                
+                if (!content) {
+                    this.showNotification('请输入客户基本信息', 'error');
+                    return;
+                }
+                
+                this.showLoading(true);
+                
+                try {
+                    const prompt = `
+                    基于以下客户基本信息，生成详细的客户标签：
+                    
+                    客户信息：${content}
+                    
+                    请从以下维度生成标签：
+                    1. 基本属性：年龄段、职业类型、收入水平、家庭结构
+                    2. 风险特征：职业风险、健康状况、风险偏好
+                    3. 保险需求：保障需求、理财需求、养老需求
+                    4. 购买特征：决策风格、价格敏感度、品牌偏好
+                    5. 沟通特点：沟通方式、关注重点、异议类型
+                    
+                    请以JSON格式返回标签结果。
+                    `;
+                    
+                    const response = await this.callDeepSeekAPI(prompt);
+                    this.customerData = JSON.parse(response);
+                    this.displayCustomerTags(this.customerData);
+                    this.analysisState.customerTagsGenerated = true;
+                    this.updateAnalysisStatus();
+                    
+                } catch (error) {
+                    console.error('生成客户标签失败:', error);
+                    this.showNotification('生成客户标签失败', 'error');
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+            
+            async analyzeCustomerNeeds() {
+                if (!this.analysisState.customerTagsGenerated) {
+                    this.showNotification('请先完成客户资料录入和标签生成', 'error');
+                    return;
+                }
+                
+                const customerChat = document.getElementById('customerChat');
+                const chatContent = customerChat.value.trim();
+                
+                if (!chatContent) {
+                    this.showNotification('请输入客户聊天记录', 'error');
+                    return;
+                }
+                
+                this.showLoading(true);
+                
+                try {
+                    const prompt = `
+                    基于客户标签和聊天记录，进行深度需求分析：
+                    
+                    客户标签：${JSON.stringify(this.customerData)}
+                    聊天记录：${chatContent}
+                    
+                    请分析：
+                    1. 显性需求：客户明确表达的保险需求
+                    2. 隐性需求：从对话中挖掘的潜在需求
+                    3. 需求优先级：按重要性排序的需求列表
+                    4. 购买动机：驱动客户购买的核心因素
+                    5. 决策影响因素：影响客户决策的关键要素
+                    6. 潜在异议：可能出现的购买异议
+                    
+                    请以JSON格式返回分析结果。
+                    `;
+                    
+                    const response = await this.callDeepSeekAPI(prompt);
+                    this.needsData = JSON.parse(response);
+                    this.displayNeedsAnalysis(this.needsData);
+                    this.analysisState.needsAnalyzed = true;
+                    this.updateAnalysisStatus();
+                    
+                } catch (error) {
+                    console.error('需求分析失败:', error);
+                    this.showNotification('需求分析失败', 'error');
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+            
+            async matchProducts() {
+                if (!this.analysisState.needsAnalyzed) {
+                    this.showNotification('请先完成需求分析', 'error');
+                    return;
+                }
+                
+                this.showLoading(true);
+                
+                try {
+                    const prompt = `
+                    基于客户标签和需求分析，从固定产品库中匹配最适合的产品：
+                    
+                    客户标签：${JSON.stringify(this.customerData)}
+                    需求分析：${JSON.stringify(this.needsData)}
+                    
+                    固定产品库：${this.productKnowledge}
+                    
+                    严格要求：
+                    1. 只能从7款固定产品中选择
+                    2. 推荐2-3款最匹配的产品
+                    3. 每个产品包括：产品名称、匹配度评分、推荐理由、建议保额、预估保费
+                    
+                    请以JSON格式返回匹配结果。
+                    `;
+                    
+                    const response = await this.callDeepSeekAPI(prompt);
+                    this.productData = JSON.parse(response);
+                    this.displayProductMatching(this.productData);
+                    this.analysisState.productsMatched = true;
+                    this.updateAnalysisStatus();
+                    
+                } catch (error) {
+                    console.error('产品匹配失败:', error);
+                    this.showNotification('产品匹配失败', 'error');
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+            
+            async generateSalesScript() {
+                if (!this.analysisState.productsMatched) {
+                    this.showNotification('请先完成产品匹配', 'error');
+                    return;
+                }
+                
+                this.showLoading(true);
+                
+                try {
+                    const prompt = `
+                    基于完整的客户分析，生成个性化销售话术：
+                    
+                    客户标签：${JSON.stringify(this.customerData)}
+                    需求分析：${JSON.stringify(this.needsData)}
+                    产品匹配：${JSON.stringify(this.productData)}
+                    
+                    请生成：
+                    1. 开场白：针对客户特点的个性化开场
+                    2. 需求确认：基于分析结果的需求确认话术
+                    3. 产品介绍：针对匹配产品的介绍话术
+                    4. 异议处理：针对潜在异议的应对话术
+                    5. 促成成交：适合客户特点的成交话术
+                    
+                    请以JSON格式返回话术内容。
+                    `;
+                    
+                    const response = await this.callDeepSeekAPI(prompt);
+                    this.scriptData = JSON.parse(response);
+                    this.displaySalesScriptGenerated(this.scriptData);
+                    this.analysisState.scriptGenerated = true;
+                    this.updateAnalysisStatus();
+                    this.enableAIChat();
+                    
+                } catch (error) {
+                    console.error('生成销售话术失败:', error);
+                    this.showNotification('生成销售话术失败', 'error');
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+            
+            async performCustomerAnalysis(chatContent) {
+                // 获取知识库中的所有相关信息
+                const knowledgeBase = this.getKnowledgeBaseContent();
+                
+                const prompt = `
+                作为专业的保险销售顾问，请基于以下信息进行全面的客户分析：
+                
+                客户对话内容：
+                ${chatContent}
+                
+                知识库信息：
+                ${knowledgeBase}
+                
+                特别关注四川石油系统员工特点：
+                - 收入稳定，月收入通常在8000-15000元
+                - 工作环境存在一定职业风险（高温、高压、化学品接触）
+                - 重视家庭保障，特别是子女教育和父母养老
+                - 对团体优惠和同事推荐比较信任
+                - 注重保险产品的实用性和性价比
+                - 决策相对谨慎，喜欢货比三家
+                
+                请从以下维度进行深度分析：
+                1. 客户基本信息（年龄、职业、收入水平、家庭结构）
+                2. 保险需求分析（风险保障、理财规划、养老规划、子女教育等）
+                3. 风险偏好（保守型、稳健型、积极型，结合职业特点）
+                4. 购买意向强度（1-10分，考虑石油系统员工特点）
+                5. 关注重点（保费、保额、保障范围、收益、团体优势等）
+                6. 潜在异议点（结合石油系统员工常见异议）
+                7. 最佳沟通策略（针对石油系统员工的专属策略）
+                8. 四川石油系统特色需求（职业风险保障、团体优势利用）
+                
+                请以JSON格式返回详细的分析结果，确保分析结果能够支撑后续的精准产品推荐。
+                `;
+                
+                const response = await this.callDeepSeekAPI(prompt);
+                
+                try {
+                    return JSON.parse(response);
+                } catch (e) {
+                    // 如果返回的不是JSON格式，则解析文本内容
+                    return {
+                        customerInfo: "基于对话内容分析",
+                        insuranceNeeds: response.substring(0, 200) + "...",
+                        riskPreference: "稳健型",
+                        purchaseIntention: 7,
+                        focusPoints: ["保障范围", "保费水平"],
+                        potentialObjections: ["保费较高", "条款复杂"],
+                        communicationStrategy: "建议采用顾问式销售方法"
+                    };
+                }
+            }
+            
+            async generateProductRecommendations(analysis) {
+                const prompt = `
+                基于以下客户分析结果，从中意人寿固定产品知识库中推荐最适合的保险产品：
+                
+                客户分析：${JSON.stringify(analysis)}
+                
+                固定产品知识库：${this.productKnowledge}
+                
+                严格要求：
+                1. 只能从以上7款固定产品中选择：一生挚爱荣耀版、一生福康甄可选版、意心守护惠选版、乐优享（百万医疗险）、乐安馨（综合意外险）、乐温馨（儿童小病补充报销）、悠然颐养（个人养老金类）
+                2. 必须推荐2-3款产品，不得推荐知识库之外的任何产品
+                3. 每个产品包括：产品名称（必须与知识库完全一致）、推荐理由、适配度评分（1-10分）、建议保额、预估保费、产品亮点
+                4. 产品名称必须严格使用知识库中的完整名称
+                
+                请以JSON格式返回推荐结果，确保产品名称与知识库完全一致。
+                `;
+                
+                const response = await this.callDeepSeekAPI(prompt);
+                
+                try {
+                    return JSON.parse(response);
+                } catch (e) {
+                    // 默认推荐结果，严格使用固定产品知识库中的7款产品
+                    return {
+                        recommendations: [
+                            {
+                                productName: "一生福康甄可选版（重大疾病保险）",
+                                reason: "适合注重健康保障的客户，甄可选版含轻症+重症双重保障",
+                                matchScore: 9,
+                                suggestedCoverage: "50万",
+                                estimatedPremium: "年缴8500元",
+                                highlights: ["120种重疾+60种轻症", "轻症豁免保费", "多次赔付设计", "不可选版更优惠"]
+                            },
+                            {
+                                productName: "一生挚爱荣耀版（终身寿险）",
+                                reason: "适合有财富传承需求的家庭，荣耀版专享权益尊贵体验",
+                                matchScore: 8,
+                                suggestedCoverage: "100万",
+                                estimatedPremium: "年缴4.8万元",
+                                highlights: ["终身寿险保障", "保额递增设计", "荣耀版专享服务", "灵活缴费方式"]
+                            },
+                            {
+                                productName: "乐优享（百万医疗险）",
+                                reason: "适合注重医疗保障的家庭，百万医疗保障安心就医",
+                                matchScore: 8,
+                                suggestedCoverage: "600万",
+                                estimatedPremium: "年缴300-500元",
+                                highlights: ["0免赔额设计", "不限社保用药", "特需医疗覆盖", "保证续保20年"]
+                            }
+                        ]
+                    };
+                }
+            }
+            
+            async generateSalesScript(analysis, recommendations) {
+                const styleMap = {
+                    'professional': '专业严谨，数据导向',
+                    'friendly': '亲切友好，情感共鸣',
+                    'consultative': '顾问式，问题导向',
+                    'direct': '直接明了，结果导向'
+                };
+                
+                const prompt = `
+                你是中意赵珂保险AI智能引擎，搭载全球最先进大模型AI技术，专门为四川石油系统员工提供保险服务。请基于以下信息，生成自然、亲切、专业的销售对话：
+                
+                客户分析：${JSON.stringify(analysis)}
+                产品推荐：${JSON.stringify(recommendations)}
+                销售风格：${styleMap[this.salesStyle]}
+                
+                请注意语言风格：
+                - 像朋友聊天一样自然，不要过于正式或机械化
+                - 多用"咱们"、"您看"、"我觉得"、"说实话"等亲近的表达
+                - 结合石油行业的实际情况，用具体例子和故事
+                - 体现对客户工作的理解和尊重
+                - 避免使用过多专业术语，用通俗易懂的话解释
+                - 不要听起来像背书或者模板化的话术
+                
+                生成内容包括：
+                1. 自然的开场对话（像老朋友见面聊天）
+                2. 了解需求的提问（关心客户，不是为了推销）
+                3. 产品介绍（用故事和案例，不是条款说明）
+                4. 处理疑虑（理解并解答，不是反驳）
+                5. 建议下一步（自然引导，不强迫决定）
+                6. 后续关怀（真诚关心，不只是业务）
+                
+                每部分提供2-3个自然对话选项，要让人感觉是真人在说话，不是AI生成的。
+                `;
+                
+                const response = await this.callDeepSeekAPI(prompt);
+                return response;
+            }
+            
+            // 预置四川石油系统话术库
+            loadPresetScript(type) {
+                const scripts = {
+                    opening: {
+                        title: "开场白话术 - 四川石油系统专用",
+                        content: `
+                        话术选项1：
+                        "张工您好，我是中意人寿的赵珂。听说您在四川石油工作，我们公司专门为石油系统的员工设计了一些保障方案，很多您的同事都选择了我们的产品。今天想和您聊聊关于家庭保障的话题。"
+                        
+                        话术选项2：
+                        "您好，我是中意人寿保险的专业顾问。我们公司与四川石油系统有长期合作关系，为很多石油员工提供了专业的保险服务。考虑到您的工作性质和收入特点，我想为您介绍一些非常适合的保障方案。"
+                        
+                        话术选项3：
+                        "李师傅您好，我是中意人寿的保险规划师。我们专门研究过石油行业员工的保障需求，发现大家都很关心家庭保障和子女教育问题。今天想和您分享一些针对石油系统员工的专属保险方案。"
+                        `
+                    },
+                    needs: {
+                        title: "需求挖掘话术 - 四川石油系统专用",
+                        content: `
+                        话术选项1：
+                        "作为石油系统的员工，您的工作相对稳定，收入也不错。但是我了解到，石油行业的工作环境还是存在一定风险的。您有没有考虑过，万一发生意外或者生病，对家庭经济会有什么影响？"
+                        
+                        话术选项2：
+                        "我接触过很多石油系统的朋友，大家都很关心两个问题：一是工作中的安全保障，二是孩子的教育规划。您现在最担心的是哪个方面呢？"
+                        
+                        话术选项3：
+                        "石油系统的福利待遇确实不错，但是我发现很多同事在商业保险方面的配置还不够完善。您觉得现在的保障能够覆盖所有的风险吗？比如重大疾病、意外伤害这些？"
+                        `
+                    },
+                    objection: {
+                        title: "异议处理话术 - 四川石油系统专用",
+                        content: `
+                        针对"单位有保险"的异议：
+                        "您说得对，石油系统的福利确实很好。但是单位的保险主要是基础保障，额度相对有限。而且如果将来换工作或者退休了，这些保障就没有了。商业保险是对单位保险的有效补充，而且是终身跟随您的。"
+                        
+                        针对"保费太贵"的异议：
+                        "我理解您的考虑。其实我们为石油系统员工提供了团体优惠，比市场价格要便宜不少。而且您可以选择分期缴费，每个月就像交个手机费一样，但换来的是全家的安心保障。"
+                        
+                        针对"需要考虑"的异议：
+                        "考虑是应该的，这确实是个重要决定。不过我想提醒您，保险这个东西，健康的时候买容易，等有了问题再买就难了。您的同事王师傅就是因为早买了重疾险，去年生病的时候获得了50万的赔付。"
+                        `
+                    },
+                    closing: {
+                        title: "成交话术 - 四川石油系统专用",
+                        content: `
+                        话术选项1：
+                        "张工，这个方案确实很适合您。我们已经为您的很多同事办理了类似的保障，反馈都很好。今天我带了投保资料，我们可以先把基础信息填一下，这样您回去和家人商量的时候也有具体的方案参考。"
+                        
+                        话术选项2：
+                        "这个月我们有石油系统的团体优惠活动，可以为您节省不少保费。机会难得，建议您抓住这个机会。我现在就可以为您办理，整个流程很简单。"
+                        
+                        话术选项3：
+                        "李师傅，保障这个事情宜早不宜迟。您看，我们今天把方案确定下来，下周就可以生效。这样您就可以安心工作，家人也放心了。您觉得怎么样？"
+                        `
+                    }
+                };
+                
+                const script = scripts[type];
+                if (script) {
+                    const salesScriptDiv = document.getElementById('salesScript');
+                    salesScriptDiv.style.display = 'block';
+                    salesScriptDiv.innerHTML = `
+                        <h4><i class="fas fa-comments"></i> ${script.title}</h4>
+                        <div class="script-content">
+                            <pre style="white-space: pre-wrap; font-family: inherit; color: var(--text-primary);">${script.content}</pre>
+                        </div>
+                    `;
+                    
+                    const copyBtn = document.getElementById('copyScriptBtn');
+                    copyBtn.style.display = 'block';
+                    copyBtn.onclick = () => this.copyToClipboard(script.content);
+                    
+                    this.showNotification(`已加载${script.title}`, 'success');
+                }
+            }
+            
+            // 获取知识库内容用于分析
+            getKnowledgeBaseContent() {
+                const knowledgeItems = JSON.parse(localStorage.getItem('knowledgeBase') || '[]');
+                let content = "知识库内容：\n";
+                
+                knowledgeItems.forEach(item => {
+                    content += `\n类型：${item.type}\n标题：${item.title}\n内容：${item.content}\n---\n`;
+                });
+                
+                // 添加预置的四川石油系统销售技巧
+                content += `\n四川石油系统销售技巧：
+                1. 建立信任：强调对石油行业的了解和专业性
+                2. 需求挖掘：重点关注职业风险和家庭保障需求
+                3. 产品推荐：突出团体优势和性价比
+                4. 异议处理：针对"单位有保险"、"保费贵"等常见异议
+                5. 成交技巧：利用同事案例和紧迫性
+                6. 后续服务：建立长期合作关系
+                
+                产品信息库：
+                - 意外险：适合石油系统高风险作业环境，保额50-100万
+                - 重疾险：覆盖职业病和常见重大疾病，保额30-50万
+                - 寿险：家庭经济支柱保障，保额100-200万
+                - 教育金：子女教育规划专用，年缴费5000-15000元
+                - 养老险：退休后生活保障，补充企业年金不足
+                - 医疗险：补充基本医保，解决高端医疗需求
+                `;
+                
+                return content;
+            }
+            
+            async callDeepSeekAPI(prompt) {
+                // 检查API密钥
+                if (!this.apiKey) {
+                    throw new Error('请先配置DeepSeek API密钥');
+                }
+                
+                try {
+                    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.apiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: 'deepseek-chat',
+                            messages: [{ role: 'user', content: prompt }],
+                            temperature: 0.7,
+                            max_tokens: 2000,
+                            stream: false
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`API调用失败: ${response.status} ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                        throw new Error('API返回数据格式错误');
+                    }
+                    
+                    return data.choices[0].message.content;
+                    
+                } catch (error) {
+                    console.error('DeepSeek API调用错误:', error);
+                    throw error;
+                }
+            }
+            
+            displayAnalysisResult(analysis) {
+                const resultDiv = document.getElementById('analysisResult');
+                resultDiv.style.display = 'block';
+                
+                resultDiv.innerHTML = `
+                    <h4><i class="fas fa-user-circle"></i> 客户画像分析</h4>
+                    <div class="analysis-grid">
+                        <div class="analysis-item">
+                            <strong>基本信息：</strong>
+                            <p>${analysis.customerInfo || '年龄30-40岁，中等收入，关注家庭保障'}</p>
+                        </div>
+                        <div class="analysis-item">
+                            <strong>保险需求：</strong>
+                            <p>${analysis.insuranceNeeds || '重疾保障、医疗补充、意外防护'}</p>
+                        </div>
+                        <div class="analysis-item">
+                            <strong>风险偏好：</strong>
+                            <span class="risk-level ${analysis.riskPreference || 'moderate'}">
+                                ${analysis.riskPreference || '稳健型'}
+                            </span>
+                        </div>
+                        <div class="analysis-item">
+                            <strong>购买意向：</strong>
+                            <div class="intention-score">
+                                ${this.getStarRating(analysis.purchaseIntention || 7)}
+                                <span>${analysis.purchaseIntention || 7}/10</span>
+                            </div>
+                        </div>
+                        <div class="analysis-item">
+                            <strong>关注重点：</strong>
+                            <div class="focus-tags">
+                                ${(analysis.focusPoints || ['保障范围', '保费水平']).map(point => 
+                                    `<span class="tag">${point}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        <div class="analysis-item">
+                            <strong>沟通策略：</strong>
+                            <p>${analysis.communicationStrategy || '建议采用顾问式销售，重点强调产品保障价值'}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            displayProductRecommendations(recommendations) {
+                const recommendDiv = document.getElementById('productRecommendations');
+                recommendDiv.style.display = 'block';
+                
+                const products = recommendations.recommendations || [
+                    {
+                        productName: "中意安康重大疾病保险",
+                        reason: "适合注重健康保障的客户，120种重疾保障覆盖全面",
+                        matchScore: 9,
+                        suggestedCoverage: "30万",
+                        estimatedPremium: "年缴6000元",
+                        highlights: ["120种重疾保障", "60种轻症保障", "轻症豁免保费"]
+                    },
+                    {
+                        productName: "中意悦享人生终身寿险",
+                        reason: "适合有财富传承需求的家庭，保额递增抵御通胀",
+                        matchScore: 8,
+                        suggestedCoverage: "50万",
+                        estimatedPremium: "年缴2.5万元",
+                        highlights: ["终身保障", "保额递增3%", "灵活缴费"]
+                    },
+                    {
+                        productName: "中意财富增值年金保险",
+                        reason: "适合稳定收入人群的养老规划，稳健增值收益",
+                        matchScore: 7,
+                        suggestedCoverage: "年缴10万",
+                        estimatedPremium: "年缴10万，5年交",
+                        highlights: ["稳健增值收益", "养老规划专用", "灵活领取"]
+                    }
+                ];
+                
+                recommendDiv.innerHTML = `
+                    <h4><i class="fas fa-lightbulb"></i> 智能产品推荐</h4>
+                    <div class="recommendations-list">
+                        ${products.map(product => `
+                            <div class="recommendation-item">
+                                <div class="product-header">
+                                    <h5>${product.productName}</h5>
+                                    <div class="match-score">
+                                        适配度: ${this.getStarRating(product.matchScore)}
+                                    </div>
+                                </div>
+                                <p class="recommendation-reason">${product.reason}</p>
+                                <div class="product-details">
+                                    <div class="detail-item">
+                                        <strong>建议保额：</strong> ${product.suggestedCoverage}
+                                    </div>
+                                    <div class="detail-item">
+                                        <strong>预估保费：</strong> ${product.estimatedPremium}
+                                    </div>
+                                </div>
+                                <div class="product-highlights">
+                                    ${product.highlights.map(highlight => 
+                                        `<span class="highlight-tag">${highlight}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            displaySalesScript(script) {
+                const scriptDiv = document.getElementById('salesScript');
+                const copyBtn = document.getElementById('copyScriptBtn');
+                
+                scriptDiv.style.display = 'block';
+                copyBtn.style.display = 'inline-block';
+                
+                scriptDiv.innerHTML = `
+                    <h4><i class="fas fa-magic"></i> 个性化销售话术</h4>
+                    <div class="sales-script-content">
+                        <div class="script-section">
+                            <h5><i class="fas fa-handshake"></i> 开场白</h5>
+                            <div class="script-options">
+                                <p>"您好！我是中意人寿的保险顾问赵珂。根据我们刚才的交流，我了解到您对家庭保障非常重视，这让我很感动。"</p>
+                            </div>
+                        </div>
+                        <div class="script-section">
+                            <h5><i class="fas fa-search"></i> 需求确认</h5>
+                            <div class="script-options">
+                                <p>"我想进一步了解一下，您目前最担心的风险是什么？是重大疾病、意外伤害，还是医疗费用？"</p>
+                            </div>
+                        </div>
+                        <div class="script-section">
+                            <h5><i class="fas fa-gift"></i> 产品介绍</h5>
+                            <div class="script-options">
+                                <p>"基于您的需求，我为您推荐我们的明星产品组合。这个方案不仅保障全面，而且性价比很高。"</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="script-text" style="display: none;">${script}</div>
+                `;
+            }
+            
+            copySalesScript() {
+                const scriptText = document.querySelector('.script-text');
+                if (scriptText) {
+                    navigator.clipboard.writeText(scriptText.textContent).then(() => {
+                        this.showNotification('话术已复制到剪贴板', 'success');
+                    });
+                }
+            }
+            
+            getStarRating(level) {
+                const stars = Math.round(level / 2);
+                return '★'.repeat(stars) + '☆'.repeat(5 - stars);
+            }
+            
+            getUrgencyLevel(urgency) {
+                if (urgency >= 8) return '<span class="urgency high">高</span>';
+                if (urgency >= 5) return '<span class="urgency medium">中</span>';
+                return '<span class="urgency low">低</span>';
+            }
+            
+            clearResults() {
+                const resultSections = ['analysisResult', 'productRecommendations', 'salesScript'];
+                resultSections.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) element.style.display = 'none';
+                });
+                const copyBtn = document.getElementById('copyScriptBtn');
+                if (copyBtn) copyBtn.style.display = 'none';
+            }
+            
+            showLoading(show) {
+                const loadingIndicator = document.getElementById('loadingIndicator');
+                if (loadingIndicator) {
+                    loadingIndicator.classList.toggle('show', show);
+                }
+            }
+            
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+            
+            initializeCarousel() {
+                this.currentSlide = 0;
+                this.totalSlides = document.querySelectorAll('.carousel-slide').length;
+                
+                const indicators = document.querySelectorAll('.indicator');
+                const carouselSlides = document.getElementById('carouselSlides');
+                
+                if (!carouselSlides || !indicators.length) return;
+                
+                indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => {
+                        this.goToSlide(index);
+                    });
+                });
+                
+                this.startAutoSlide();
+                
+                const carouselContainer = document.querySelector('.carousel-container');
+                if (carouselContainer) {
+                    carouselContainer.addEventListener('mouseenter', () => {
+                        clearInterval(this.autoSlideInterval);
+                    });
+                    
+                    carouselContainer.addEventListener('mouseleave', () => {
+                        this.startAutoSlide();
+                    });
+                }
+            }
+            
+            goToSlide(slideIndex) {
+                this.currentSlide = slideIndex;
+                const carouselSlides = document.getElementById('carouselSlides');
+                const indicators = document.querySelectorAll('.indicator');
+                
+                if (carouselSlides) {
+                    carouselSlides.style.transform = `translateX(-${slideIndex * 100}%)`;
+                }
+                
+                indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === slideIndex);
+                });
+            }
+            
+            nextSlide() {
+                this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+                this.goToSlide(this.currentSlide);
+            }
+            
+            startAutoSlide() {
+                this.autoSlideInterval = setInterval(() => {
+                    this.nextSlide();
+                }, 5000);
+            }
+            
+            // AI对话功能
+            initializeChatTabs() {
+                const tabBtns = document.querySelectorAll('.tab-btn');
+                const tabContents = document.querySelectorAll('.tab-content');
+                
+                tabBtns.forEach((btn, index) => {
+                    btn.addEventListener('click', () => {
+                        // 移除所有活动状态
+                        tabBtns.forEach(b => b.classList.remove('active'));
+                        tabContents.forEach(c => c.classList.remove('active'));
+                        
+                        // 添加当前活动状态
+                        btn.classList.add('active');
+                        tabContents[index].classList.add('active');
+                    });
+                });
+                
+                // 初始化聊天功能
+                this.initializeChat();
+            }
+            
+            initializeChat() {
+                const chatInput = document.getElementById('aiChatInput');
+                const sendBtn = document.getElementById('sendChatBtn');
+                const quickBtns = document.querySelectorAll('.quick-btn');
+                
+                if (chatInput && sendBtn) {
+                    // 发送按钮点击事件
+                    sendBtn.addEventListener('click', () => {
+                        this.sendMessage();
+                    });
+                    
+                    // 输入框回车事件（Ctrl+Enter发送）
+                    chatInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter' && e.ctrlKey) {
+                            e.preventDefault();
+                            this.sendMessage();
+                        }
+                    });
+                }
+                
+                // 快速提示按钮
+                quickBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const prompt = btn.getAttribute('data-prompt') || btn.textContent;
+                        if (chatInput) {
+                            chatInput.value = prompt;
+                            this.sendMessage();
+                        }
+                    });
+                });
+                
+                // 添加欢迎消息
+                this.addSystemMessage('🤖 您好！我是您的专属保险顾问AI助手，可以为您提供专业的保险咨询和销售建议。');
+            }
+            
+            async sendMessage() {
+                const chatInput = document.getElementById('aiChatInput');
+                const message = chatInput.value.trim();
+                
+                if (!message) return;
+                
+                // 添加用户消息
+                this.addUserMessage(message);
+                chatInput.value = '';
+                
+                // 显示AI正在输入
+                this.showTypingIndicator();
+                
+                try {
+                    // 构建包含上下文的提示
+                    const contextPrompt = this.buildContextPrompt(message);
+                    
+                    // 调用DeepSeek API
+                    const response = await this.callDeepSeekChatAPI(contextPrompt);
+                    
+                    // 隐藏输入指示器并显示AI回复
+                    this.hideTypingIndicator();
+                    this.addAIMessage(response);
+                    
+                } catch (error) {
+                    this.hideTypingIndicator();
+                    this.addAIMessage('抱歉，我暂时无法回复您的问题。请稍后再试。');
+                    console.error('AI对话错误:', error);
+                }
+            }
+            
+            buildContextPrompt(userMessage) {
+                // 获取知识库内容
+                const knowledgeBase = this.getKnowledgeBaseContent();
+                
+                // 获取当前客户分析结果（如果有）
+                const customerAnalysis = this.getCurrentCustomerAnalysis();
+                
+                let contextPrompt = `你是中意赵珂保险AI智能引擎，搭载全球最先进大模型AI技术，专门为四川石油系统员工提供保险咨询服务。
+
+`;
+                
+                contextPrompt += `知识库信息：
+${knowledgeBase}
+
+`;
+                
+                if (customerAnalysis) {
+                    contextPrompt += `当前客户分析：
+${customerAnalysis}
+
+`;
+                }
+                
+                contextPrompt += `请根据以上信息，用专业、亲切、自然的语调回答客户的问题。回答要：
+`;
+                contextPrompt += `1. 针对四川石油系统员工的特点
+`;
+                contextPrompt += `2. 语言自然流畅，避免过于机械化
+`;
+                contextPrompt += `3. 提供具体可行的建议
+`;
+                contextPrompt += `4. 适当使用专业术语但要通俗易懂
+
+`;
+                contextPrompt += `客户问题：${userMessage}`;
+                
+                return contextPrompt;
+            }
+            
+            getCurrentCustomerAnalysis() {
+                const analysisResult = document.getElementById('analysisResult');
+                if (analysisResult && analysisResult.style.display !== 'none') {
+                    return analysisResult.textContent;
+                }
+                return null;
+            }
+            
+            async callDeepSeekChatAPI(prompt) {
+                // 检查API密钥
+                if (!this.apiKey) {
+                    throw new Error('请先配置DeepSeek API密钥');
+                }
+                
+                try {
+                    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.apiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: 'deepseek-chat',
+                            messages: [{ role: 'user', content: prompt }],
+                            temperature: 0.7,
+                            max_tokens: 1000,
+                            stream: false
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`API调用失败: ${response.status} ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                        throw new Error('API返回数据格式错误');
+                    }
+                    
+                    return data.choices[0].message.content;
+                    
+                } catch (error) {
+                    console.error('DeepSeek API调用错误:', error);
+                    // 如果API调用失败，返回友好的错误提示
+                    return '抱歉，AI服务暂时不可用。请检查网络连接或API密钥配置，稍后再试。如需帮助，请联系技术支持。';
+                }
+            }
+            
+            addSystemMessage(message) {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!chatMessages) return;
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'system-message';
+                messageDiv.innerHTML = `
+                    <i class="fas fa-info-circle"></i>
+                    <span>${message}</span>
+                `;
+                
+                chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            addUserMessage(message) {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!chatMessages) return;
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'user-message';
+                messageDiv.textContent = message;
+                
+                chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            addAIMessage(message) {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!chatMessages) return;
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'ai-message';
+                messageDiv.innerHTML = this.formatAIMessage(message);
+                
+                chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            formatAIMessage(message) {
+                // 简单的格式化，将换行符转换为<br>
+                return message.replace(/\n/g, '<br>');
+            }
+            
+            showTypingIndicator() {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!chatMessages) return;
+                
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'typing-indicator';
+                typingDiv.id = 'typingIndicator';
+                typingDiv.innerHTML = `
+                    <span>AI正在思考</span>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                `;
+                
+                chatMessages.appendChild(typingDiv);
+                this.scrollToBottom();
+            }
+            
+            hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            scrollToBottom() {
+                const chatMessages = document.getElementById('chatMessages');
+                if (chatMessages) {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            }
+        }
+        
+        // 初始化应用
+        window.addEventListener('DOMContentLoaded', () => {
+            new InsuranceAssistant();
+        });
+        
+        // 添加动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            .panel {
+                animation: slideIn 0.6s ease-out;
+            }
+            
+            .analysis-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+                margin-top: 15px;
+            }
+            
+            .analysis-item {
+                padding: 15px;
+                background: rgba(220, 20, 60, 0.1);
+                border-radius: 8px;
+                border-left: 3px solid var(--primary-color);
+            }
+            
+            .risk-level {
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 0.9em;
+                font-weight: 600;
+            }
+            
+            .risk-level.conservative {
+                background: #e3f2fd;
+                color: #1976d2;
+            }
+            
+            .risk-level.moderate {
+                background: #f3e5f5;
+                color: #7b1fa2;
+            }
+            
+            .risk-level.aggressive {
+                background: #ffebee;
+                color: #d32f2f;
+            }
+            
+            .intention-score {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .focus-tags, .product-highlights {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 8px;
+            }
+            
+            .tag, .highlight-tag {
+                background: var(--primary-gradient);
+                color: white;
+                padding: 4px 10px;
+                border-radius: 15px;
+                font-size: 0.85em;
+            }
+            
+            .recommendations-list {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                margin-top: 15px;
+            }
+            
+            .recommendation-item {
+                padding: 20px;
+                background: rgba(26, 15, 15, 0.8);
+                border-radius: 12px;
+                border: 1px solid var(--border-color);
+            }
+            
+            .product-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+            
+            .product-header h5 {
+                color: var(--primary-color);
+                margin: 0;
+            }
+            
+            .match-score {
+                font-size: 0.9em;
+                color: var(--text-light);
+            }
+            
+            .product-details {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 10px;
+                margin: 15px 0;
+            }
+            
+            .detail-item {
+                padding: 8px;
+                background: rgba(220, 20, 60, 0.1);
+                border-radius: 6px;
+            }
+            
+            .sales-script-content {
+                margin-top: 15px;
+            }
+            
+            .script-section {
+                margin-bottom: 20px;
+                padding: 15px;
+                background: rgba(26, 15, 15, 0.6);
+                border-radius: 8px;
+            }
+            
+            .script-section h5 {
+                color: var(--primary-color);
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            .script-options p {
+                background: rgba(220, 20, 60, 0.1);
+                padding: 12px;
+                border-radius: 6px;
+                margin: 8px 0;
+                border-left: 3px solid var(--primary-color);
+            }
+            
+            .uploaded-files {
+                margin-top: 15px;
+            }
+            
+            .uploaded-file {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px;
+                background: rgba(26, 15, 15, 0.6);
+                border-radius: 6px;
+                margin-bottom: 8px;
+            }
+            
+            .file-size {
+                color: var(--text-light);
+                font-size: 0.9em;
+            }
+            
+            /* 新增分析流程样式 */
+            .analysis-result {
+                background: rgba(26, 15, 15, 0.8);
+                border-radius: 8px;
+                padding: 15px;
+                margin-top: 15px;
+                border: 1px solid rgba(220, 20, 60, 0.3);
+            }
+            
+            .analysis-result h4 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+                border-bottom: 1px solid rgba(220, 20, 60, 0.3);
+                padding-bottom: 8px;
+            }
+            
+            .tag-category, .need-category {
+                background: rgba(220, 20, 60, 0.1);
+                padding: 10px;
+                margin: 8px 0;
+                border-radius: 6px;
+                border-left: 3px solid var(--primary-color);
+            }
+            
+            .product-match {
+                background: rgba(220, 20, 60, 0.1);
+                padding: 15px;
+                margin: 10px 0;
+                border-radius: 8px;
+                border: 1px solid rgba(220, 20, 60, 0.3);
+            }
+            
+            .product-match h5 {
+                color: var(--primary-color);
+                margin-bottom: 10px;
+            }
+            
+            .status-display {
+                background: rgba(26, 15, 15, 0.8);
+                border-radius: 8px;
+                padding: 15px;
+                margin-top: 15px;
+            }
+            
+            .status-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(220, 20, 60, 0.2);
+            }
+            
+            .status-item:last-child {
+                border-bottom: none;
+            }
+            
+            .status-item.completed {
+                color: #4CAF50;
+            }
+            
+            .status-item.pending {
+                color: #999;
+            }
+            
+            .status-icon {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+            }
+            
+            .status-item.completed .status-icon {
+                background: #4CAF50;
+                color: white;
+            }
+            
+            .status-item.pending .status-icon {
+                background: #333;
+                color: #999;
+            }
+            
+            /* AI聊天样式 */
+            #aiChatMessages {
+                height: 300px;
+                overflow-y: auto;
+                border: 1px solid rgba(220, 20, 60, 0.3);
+                border-radius: 8px;
+                padding: 15px;
+                background: rgba(26, 15, 15, 0.6);
+                margin-bottom: 15px;
+            }
+            
+            .chat-message {
+                margin-bottom: 15px;
+                padding: 10px;
+                border-radius: 8px;
+            }
+            
+            .user-message {
+                background: rgba(220, 20, 60, 0.2);
+                margin-left: 20%;
+            }
+            
+            .ai-message {
+                background: rgba(26, 15, 15, 0.8);
+                margin-right: 20%;
+                border: 1px solid rgba(220, 20, 60, 0.3);
+            }
+            
+            .temp-message {
+                opacity: 0.7;
+                font-style: italic;
+            }
+            
+            .message-content {
+                margin-bottom: 5px;
+            }
+            
+            .message-time {
+                font-size: 0.8em;
+                color: var(--text-light);
+                text-align: right;
+            }
+            
+            .ai-chat-input-area {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+            
+            #aiChatInput {
+                flex: 1;
+            }
+            
+            #aiChatStatus {
+                color: #ff6b6b;
+                font-size: 0.9em;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 设置面板功能
+        window.toggleSettings = function() {
+            const panel = document.getElementById('settingsPanel');
+            panel.classList.toggle('show');
+        };
+
+        // 点击外部关闭设置面板
+        document.addEventListener('click', function(event) {
+            const panel = document.getElementById('settingsPanel');
+            const settingsBtn = document.querySelector('.settings-btn');
+            
+            if (!panel.contains(event.target) && !settingsBtn.contains(event.target)) {
+                panel.classList.remove('show');
+            }
+        });
+
+        // 背景图片上传
+        window.uploadBackground = function() {
+            const fileInput = document.getElementById('backgroundUpload');
+            const file = fileInput.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    document.body.style.backgroundImage = `url(${imageUrl})`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.body.style.backgroundRepeat = 'no-repeat';
+                    
+                    // 保存到本地存储
+                    localStorage.setItem('customBackground', imageUrl);
+                    
+                    alert('背景已更新！');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('请先选择一张图片');
+            }
+        };
+
+        // 重置背景
+        window.resetBackground = function() {
+            document.body.style.backgroundImage = '';
+            document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            document.body.style.backgroundAttachment = 'fixed';
+            
+            // 清除本地存储
+            localStorage.removeItem('customBackground');
+            
+            // 清空文件输入
+            document.getElementById('backgroundUpload').value = '';
+            
+            alert('背景已重置！');
+        };
+
+        // 页面加载时恢复背景设置
+        window.addEventListener('load', function() {
+            const savedBackground = localStorage.getItem('customBackground');
+            if (savedBackground) {
+                document.body.style.backgroundImage = `url(${savedBackground})`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                document.body.style.backgroundRepeat = 'no-repeat';
+            }
+        });
+    </script>
+</body>
+</html>

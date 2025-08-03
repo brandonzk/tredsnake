@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 400">
+  <defs>
+    <!-- 黑色科技渐变 -->
+    <linearGradient id="techGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#2a2a2a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 金色电路渐变 -->
+    <linearGradient id="circuitGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#ffed4e;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#ffd700;stop-opacity:0.3" />
+    </linearGradient>
+    
+    <!-- 蓝色数据流渐变 -->
+    <linearGradient id="dataGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.2" />
+      <stop offset="50%" style="stop-color:#0099cc;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:0.2" />
+    </linearGradient>
+    
+    <!-- 光晕效果 -->
+    <radialGradient id="glowEffect" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:0.4" />
+      <stop offset="70%" style="stop-color:#ffd700;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#ffd700;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- 动态光效 -->
+    <linearGradient id="lightBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0" />
+      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 主背景 -->
+  <rect width="1920" height="400" fill="url(#techGradient)"/>
+  
+  <!-- 电路板基础网格 -->
+  <g stroke="#333" stroke-width="0.5" opacity="0.3">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#333" stroke-width="0.5"/>
+      </pattern>
+    </defs>
+    <rect width="1920" height="400" fill="url(#grid)"/>
+  </g>
+  
+  <!-- 左侧电路板区域 -->
+  <g transform="translate(50,50)">
+    <!-- 主电路线 -->
+    <g stroke="url(#circuitGradient)" stroke-width="3" fill="none">
+      <path d="M0,50 L200,50 L200,150 L350,150 L350,250 L500,250"/>
+      <path d="M0,100 L150,100 L150,200 L300,200 L300,300 L450,300"/>
+      <path d="M0,150 L100,150 L100,250 L250,250 L250,350 L400,350"/>
+    </g>
+    
+    <!-- 电路节点 -->
+    <g fill="#ffd700">
+      <circle cx="200" cy="50" r="4"/>
+      <circle cx="350" cy="150" r="4"/>
+      <circle cx="500" cy="250" r="4"/>
+      <circle cx="150" cy="100" r="4"/>
+      <circle cx="300" cy="200" r="4"/>
+      <circle cx="450" cy="300" r="4"/>
+      <circle cx="100" cy="150" r="4"/>
+      <circle cx="250" cy="250" r="4"/>
+      <circle cx="400" cy="350" r="4"/>
+    </g>
+    
+    <!-- 微处理器芯片 -->
+    <g transform="translate(180,30)">
+      <rect x="0" y="0" width="40" height="40" fill="#1a1a1a" stroke="#ffd700" stroke-width="1" rx="2"/>
+      <rect x="5" y="5" width="30" height="30" fill="#333" rx="1"/>
+      <g stroke="#ffd700" stroke-width="0.5">
+        <line x1="10" y1="10" x2="30" y2="10"/>
+        <line x1="10" y1="15" x2="25" y2="15"/>
+        <line x1="10" y1="20" x2="30" y2="20"/>
+        <line x1="10" y1="25" x2="25" y2="25"/>
+        <line x1="10" y1="30" x2="30" y2="30"/>
+      </g>
+    </g>
+  </g>
+  
+  <!-- 右侧数据流区域 -->
+  <g transform="translate(1400,50)">
+    <!-- 数据流线条 -->
+    <g stroke="url(#dataGradient)" stroke-width="2" fill="none">
+      <path d="M0,50 Q50,25 100,50 T200,50 T300,50 T400,50"/>
+      <path d="M0,100 Q60,75 120,100 T240,100 T360,100 T480,100"/>
+      <path d="M0,150 Q40,125 80,150 T160,150 T240,150 T320,150"/>
+      <path d="M0,200 Q70,175 140,200 T280,200 T420,200"/>
+      <path d="M0,250 Q50,225 100,250 T200,250 T300,250"/>
+      <path d="M0,300 Q80,275 160,300 T320,300"/>
+    </g>
+    
+    <!-- 数据节点 -->
+    <g fill="#00d4ff" opacity="0.8">
+      <circle cx="100" cy="50" r="2"/>
+      <circle cx="200" cy="50" r="2"/>
+      <circle cx="300" cy="50" r="2"/>
+      <circle cx="120" cy="100" r="2"/>
+      <circle cx="240" cy="100" r="2"/>
+      <circle cx="360" cy="100" r="2"/>
+      <circle cx="80" cy="150" r="2"/>
+      <circle cx="160" cy="150" r="2"/>
+      <circle cx="240" cy="150" r="2"/>
+    </g>
+  </g>
+  
+  <!-- 中央核心区域 -->
+  <g transform="translate(960,200)">
+    <!-- 核心光晕 -->
+    <ellipse cx="0" cy="0" rx="300" ry="100" fill="url(#glowEffect)"/>
+    
+    <!-- 中央处理单元 -->
+    <g transform="translate(0,-40)">
+      <!-- 外框 -->
+      <rect x="-150" y="-30" width="300" height="60" fill="rgba(0,0,0,0.8)" stroke="#ffd700" stroke-width="2" rx="8"/>
+      
+      <!-- 内部电路 -->
+      <g stroke="#ffd700" stroke-width="1" opacity="0.6">
+        <line x1="-140" y1="-20" x2="140" y2="-20"/>
+        <line x1="-140" y1="-10" x2="140" y2="-10"/>
+        <line x1="-140" y1="0" x2="140" y2="0"/>
+        <line x1="-140" y1="10" x2="140" y2="10"/>
+        <line x1="-140" y1="20" x2="140" y2="20"/>
+        
+        <line x1="-120" y1="-25" x2="-120" y2="25"/>
+        <line x1="-80" y1="-25" x2="-80" y2="25"/>
+        <line x1="-40" y1="-25" x2="-40" y2="25"/>
+        <line x1="0" y1="-25" x2="0" y2="25"/>
+        <line x1="40" y1="-25" x2="40" y2="25"/>
+        <line x1="80" y1="-25" x2="80" y2="25"/>
+        <line x1="120" y1="-25" x2="120" y2="25"/>
+      </g>
+      
+      <!-- 核心标识 -->
+      <g transform="translate(0,-5)">
+        <!-- 钻石标志 -->
+        <path d="M-12,-8 L0,-20 L12,-8 L0,4 Z" fill="#dc143c" stroke="#ffd700" stroke-width="1"/>
+        <path d="M-8,-6 L0,-14 L8,-6 L0,0 Z" fill="#ff6b6b" opacity="0.8"/>
+      </g>
+    </g>
+    
+    <!-- 主标题 -->
+    <text x="0" y="15" text-anchor="middle" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">ZHONGYI Genesis 智能生态系统</text>
+    <text x="0" y="40" text-anchor="middle" fill="#00d4ff" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400">ZHONGYI Genesis Intelligent Ecosystem Platform</text>
+    <text x="0" y="60" text-anchor="middle" fill="#e0e0e0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="400">新一代智能产品生态管理平台</text>
+  </g>
+  
+  <!-- 底部装饰线 -->
+  <g transform="translate(0,380)">
+    <rect x="0" y="0" width="1920" height="2" fill="url(#circuitGradient)"/>
+    <g fill="#ffd700" opacity="0.6">
+      <circle cx="200" cy="1" r="2"/>
+      <circle cx="400" cy="1" r="2"/>
+      <circle cx="600" cy="1" r="2"/>
+      <circle cx="800" cy="1" r="2"/>
+      <circle cx="1000" cy="1" r="2"/>
+      <circle cx="1200" cy="1" r="2"/>
+      <circle cx="1400" cy="1" r="2"/>
+      <circle cx="1600" cy="1" r="2"/>
+      <circle cx="1800" cy="1" r="2"/>
+    </g>
+  </g>
+  
+  <!-- 中意保险Logo区域 -->
+  <g transform="translate(1750, 350)">
+    <!-- Logo背景 -->
+    <rect x="0" y="0" width="80" height="40" rx="8" fill="#1a1a2e" stroke="#00d4ff" stroke-width="1"/>
+    <!-- 中意Logo图标 -->
+    <circle cx="20" cy="20" r="8" fill="none" stroke="#00d4ff" stroke-width="2"/>
+    <path d="M16 20 L20 16 L24 20" stroke="#00d4ff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- 中意文字 -->
+    <text x="35" y="17" 
+          font-family="Inter, Arial, sans-serif" 
+          font-size="10" font-weight="600" fill="#00d4ff">
+      中意保险
+    </text>
+    <text x="35" y="28" 
+          font-family="Inter, Arial, sans-serif" 
+          font-size="8" font-weight="400" fill="#888">
+      ZHONGYI
+    </text>
+  </g>
+</svg>

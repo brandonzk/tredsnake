@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我 - 中意赵珂保险AI智能引擎</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #007aff;
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 40px 40px;
+        }
+
+        .content-wrapper {
+            max-width: 1400px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .text-content {
+            padding-right: 40px;
+        }
+
+        .page-title {
+            font-size: clamp(3.5rem, 8vw, 6rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, #a1a1a6, #007aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #a1a1a6;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .intro-section {
+            margin-bottom: 50px;
+        }
+
+        .intro-title {
+            color: #007aff;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .intro-text {
+            color: #e5e5e7;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        .contact-section {
+            margin-top: 40px;
+        }
+
+        .contact-title {
+            color: #007aff;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            color: #e5e5e7;
+            font-size: 1rem;
+        }
+
+        .contact-item i {
+            color: #007aff;
+            width: 20px;
+            text-align: center;
+        }
+
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 350px;
+            height: 420px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .profile-title {
+            color: #007aff;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .qr-section {
+            margin-top: 20px;
+        }
+
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .qr-label {
+            color: #a1a1a6;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .features-section {
+            margin-top: 100px;
+            padding: 80px 40px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .features-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #ffffff, #a1a1a6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #007aff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #007aff, #0056d3);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .feature-description {
+            color: #a1a1a6;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 1200px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+                gap: 60px;
+                text-align: center;
+            }
+
+            .text-content {
+                padding-right: 0;
+            }
+
+            .profile-section {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 60px 20px 20px;
+            }
+
+            .content-wrapper {
+                gap: 40px;
+            }
+
+            .profile-image {
+                width: 280px;
+                height: 340px;
+            }
+
+            .page-title {
+                font-size: 3rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .features-section {
+                padding: 60px 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .feature-card {
+                padding: 30px 20px;
+            }
+
+            .back-btn {
+                top: 15px;
+                left: 15px;
+                padding: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        <span>返回主页</span>
+    </a>
+
+    <div class="main-container">
+        <div class="content-wrapper">
+            <div class="text-content">
+                <h1 class="page-title">About Me</h1>
+                <p class="subtitle">新时代保险智能引擎</p>
+                
+                <div class="intro-section">
+                    <h3 class="intro-title">系统创建初心</h3>
+                    <p class="intro-text">
+                        专注于AI技术在保险行业的应用，致力于用科技改善保险服务体验。这个平台的创建初心不是传统的关怀，而是要打造新时代的保险智能引擎，为石油行业工作者提供更专业、智能化的保障解决方案。
+                    </p>
+                </div>
+
+                <div class="intro-section">
+                    <h3 class="intro-title">与传统保险销售的区别</h3>
+                    <p class="intro-text">
+                        传统保险销售往往依赖人工推销和标准化产品介绍，而我们的智能引擎通过AI技术进行精准的客户需求分析、智能产品匹配和专业文档处理，为中石油职工提供个性化、专业化的保险解决方案。
+                    </p>
+                </div>
+
+                <div class="intro-section">
+                    <h3 class="intro-title">专业智能化服务</h3>
+                    <p class="intro-text">
+                        系统集成了客户需求分析、产品智能匹配、文档自动处理、客户跟进管理等功能模块，通过数据驱动和AI算法，确保为中石油职工和家属提供最适合的保险保障方案。
+                    </p>
+                </div>
+
+                <div class="contact-section">
+                    <h3 class="contact-title">联系方式</h3>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>联系电话：138 1886 9987</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>联系邮箱：zhaoke@zhongyi.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-id-card"></i>
+                        <span>执业证编号：000035510000000002025000436</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <div class="profile-image">
+                    <img src="中意人寿/中意产品介绍/个人资料/个人照片.png" alt="赵珂">
+                </div>
+                <div class="profile-name">赵珂</div>
+                <div class="profile-title">中意人寿保险有限公司 客户经理</div>
+                
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="中意人寿/中意产品介绍/个人资料/二维码.jpg" alt="微信二维码">
+                    </div>
+                    <div class="qr-label">扫码添加微信</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="features-section">
+        <div class="features-container">
+            <h2 class="features-title">核心优势</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="feature-title">AI智能分析</div>
+                    <div class="feature-description">
+                        运用先进的人工智能技术，深度分析客户需求，提供精准的保险产品推荐，告别传统的一刀切销售模式。
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="feature-title">专为中石油定制</div>
+                    <div class="feature-description">
+                        深度了解石油行业特点，针对中石油职工和家属的特殊需求，提供量身定制的保险解决方案。
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="feature-title">智能化流程</div>
+                    <div class="feature-description">
+                        从需求分析到产品匹配，从文档处理到客户跟进，全流程智能化管理，提升服务效率和专业度。
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-title">专业保障</div>
+                    <div class="feature-description">
+                        基于大数据分析和专业保险知识，确保每一份保险方案都经过严格的专业评估和风险分析。
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="feature-title">数据驱动决策</div>
+                    <div class="feature-description">
+                        通过客户数据分析和跟进记录，持续优化服务质量，为团队提供科学的决策支持。
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="feature-title">新时代服务理念</div>
+                    <div class="feature-description">
+                        摒弃传统保险销售的推销模式，以客户真实需求为导向，用科技赋能专业服务。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="common.js"></script>
+</body>
+</html>

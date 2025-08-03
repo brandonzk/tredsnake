@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0f0f;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2d1b1b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a0f0f;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc143c;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff4757;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc143c;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0099cc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="512" height="512" rx="80" ry="80" fill="url(#bgGradient)" stroke="#dc143c" stroke-width="4"/>
+  
+  <!-- 科技感装饰线条 -->
+  <g stroke="#dc143c" stroke-width="2" fill="none" opacity="0.3">
+    <circle cx="256" cy="256" r="200" stroke-dasharray="10,5"/>
+    <circle cx="256" cy="256" r="150" stroke-dasharray="5,10"/>
+    <circle cx="256" cy="256" r="100" stroke-dasharray="15,5"/>
+  </g>
+  
+  <!-- 中央AI大脑图标 -->
+  <g transform="translate(256,180)">
+    <!-- 大脑轮廓 -->
+    <path d="M-60,-40 C-80,-60 -80,-80 -60,-90 C-40,-100 -20,-100 0,-90 C20,-100 40,-100 60,-90 C80,-80 80,-60 60,-40 C60,-20 60,0 50,20 C40,40 20,50 0,50 C-20,50 -40,40 -50,20 C-60,0 -60,-20 -60,-40 Z" 
+          fill="url(#iconGradient)" stroke="#ff6b7a" stroke-width="3"/>
+    
+    <!-- 神经网络线条 -->
+    <g stroke="#00d4ff" stroke-width="2" fill="none">
+      <path d="M-30,-20 Q0,-10 30,-20" opacity="0.8"/>
+      <path d="M-40,0 Q0,10 40,0" opacity="0.8"/>
+      <path d="M-25,20 Q0,30 25,20" opacity="0.8"/>
+      <circle cx="-30" cy="-20" r="3" fill="#00d4ff"/>
+      <circle cx="0" cy="-10" r="3" fill="#00d4ff"/>
+      <circle cx="30" cy="-20" r="3" fill="#00d4ff"/>
+      <circle cx="-40" cy="0" r="3" fill="#00d4ff"/>
+      <circle cx="40" cy="0" r="3" fill="#00d4ff"/>
+    </g>
+  </g>
+  
+  <!-- 应用名称 -->
+  <text x="256" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="url(#textGradient)">中意创世纪</text>
+  <text x="256" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="600" fill="#ffffff">AI智能保险顾问</text>
+  
+  <!-- 底部装饰 -->
+  <g transform="translate(256,420)">
+    <rect x="-80" y="-5" width="160" height="10" rx="5" fill="url(#iconGradient)" opacity="0.6"/>
+    <circle cx="-60" cy="0" r="4" fill="#00d4ff"/>
+    <circle cx="0" cy="0" r="4" fill="#00d4ff"/>
+    <circle cx="60" cy="0" r="4" fill="#00d4ff"/>
+  </g>
+  
+  <!-- 科技感粒子效果 -->
+  <g fill="#00d4ff" opacity="0.4">
+    <circle cx="100" cy="100" r="2"/>
+    <circle cx="400" cy="120" r="1.5"/>
+    <circle cx="80" cy="400" r="2"/>
+    <circle cx="420" cy="380" r="1.5"/>
+    <circle cx="150" cy="450" r="1"/>
+    <circle cx="380" cy="80" r="1"/>
+  </g>
+</svg>

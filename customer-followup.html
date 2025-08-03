@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户跟进管理 - 中意赵珂保险AI智能引擎</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #1d1d1f;
+            --accent-color: #007aff;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(0, 0, 0, 0.8);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --success-color: #30d158;
+            --warning-color: #ff9f0a;
+            --error-color: #ff453a;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--primary-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .page-banner {
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)),
+                        url('中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (21).png');
+            background-size: 1920px 1080px;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 1080px;
+            transition: background-image 1s ease-in-out;
+        }
+        
+        .banner-content {
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+            z-index: 2;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+        }
+        
+        .banner-title {
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 900;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffffff, #a1a1a6, #007aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        
+        .banner-subtitle {
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            color: var(--text-secondary);
+            margin-bottom: 50px;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+        
+        .banner-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff, #a1a1a6, #007aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        .toolbar {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 15px 12px 45px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        
+        .filter-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 15px;
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: #0056cc;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-color);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .customers-table {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 25px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .table th {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .table td {
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .table tbody tr {
+            transition: var(--transition);
+        }
+        
+        .table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .customer-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .customer-phone {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .status-new {
+            background: rgba(0, 122, 255, 0.2);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+        
+        .status-contacted {
+            background: rgba(255, 159, 10, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+        
+        .status-interested {
+            background: rgba(48, 209, 88, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .status-closed {
+            background: rgba(255, 69, 58, 0.2);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+        
+        .priority-high {
+            color: var(--error-color);
+        }
+        
+        .priority-medium {
+            color: var(--warning-color);
+        }
+        
+        .priority-low {
+            color: var(--success-color);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-small {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-small:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+            color: var(--text-primary);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: var(--text-primary);
+            backdrop-filter: blur(20px);
+            z-index: 1002;
+            transform: translateX(400px);
+            transition: var(--transition);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            border-color: var(--success-color);
+        }
+        
+        .notification.error {
+            border-color: var(--error-color);
+        }
+        
+        /* 底部版权信息样式 */
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-content p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .table-container {
+                font-size: 12px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 设置随机背景图片
+        const backgroundImages = [
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (21).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (22).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (23).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (24).png',
+            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (25).png'
+        ];
+        const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+        document.addEventListener('DOMContentLoaded', function() {
+            const banner = document.querySelector('.page-banner');
+            banner.style.backgroundImage = `linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('${randomImage}')`;
+        });
+    </script>
+    <div class="page-banner">
+        <div class="banner-content">
+            <h1 class="banner-title">Customer Follow-up</h1>
+            <p class="banner-subtitle">客户跟进管理</p>
+            <p class="banner-description">智能客户关系管理，全程跟踪服务轨迹，让每一次沟通都更有价值</p>
+        </div>
+    </div>
+    
+    <a href="/" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        <span>返回主页</span>
+    </a>
+    
+    <div class="container">
+        
+        <div class="toolbar">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="搜索客户姓名、电话或备注..." id="searchInput">
+            </div>
+            
+            <select class="filter-select" id="statusFilter">
+                <option value="">全部状态</option>
+                <option value="new">新客户</option>
+                <option value="contacted">已联系</option>
+                <option value="interested">有意向</option>
+                <option value="closed">已成交</option>
+            </select>
+            
+            <select class="filter-select" id="priorityFilter">
+                <option value="">全部优先级</option>
+                <option value="high">高优先级</option>
+                <option value="medium">中优先级</option>
+                <option value="low">低优先级</option>
+            </select>
+            
+            <button class="btn" onclick="openAddCustomerModal()">
+                <i class="fas fa-plus"></i>
+                <span>添加客户</span>
+            </button>
+            
+            <button class="btn btn-secondary" onclick="exportData()">
+                <i class="fas fa-download"></i>
+                <span>导出数据</span>
+            </button>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCustomers">0</div>
+                <div class="stat-label">总客户数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="newCustomers">0</div>
+                <div class="stat-label">新客户</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="interestedCustomers">0</div>
+                <div class="stat-label">有意向</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="closedDeals">0</div>
+                <div class="stat-label">已成交</div>
+            </div>
+        </div>
+        
+        <div class="customers-table">
+            <div class="table-header">
+                <h2 class="table-title">客户列表</h2>
+                <span id="customerCount">共 0 位客户</span>
+            </div>
+            
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>客户信息</th>
+                            <th>职业收入</th>
+                            <th>需求简述</th>
+                            <th>推荐产品</th>
+                            <th>状态</th>
+                            <th>优先级</th>
+                            <th>下次跟进</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersTableBody">
+                        <!-- 客户数据将通过JavaScript动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 添加/编辑客户模态框 -->
+    <div class="modal" id="customerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">添加客户</h3>
+                <button class="close-btn" onclick="closeCustomerModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="customerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">客户姓名 *</label>
+                        <input type="text" class="form-input" id="customerName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">联系电话 *</label>
+                        <input type="tel" class="form-input" id="customerPhone" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">年龄</label>
+                        <input type="number" class="form-input" id="customerAge" min="0" max="120">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">性别</label>
+                        <select class="form-select" id="customerGender">
+                            <option value="">请选择</option>
+                            <option value="male">男</option>
+                            <option value="female">女</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">职业</label>
+                        <input type="text" class="form-input" id="customerOccupation" placeholder="如：软件工程师">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">年收入</label>
+                        <input type="text" class="form-input" id="customerIncome" placeholder="如：20-30万">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">婚姻状况</label>
+                        <select class="form-select" id="customerMaritalStatus">
+                            <option value="">请选择</option>
+                            <option value="single">未婚</option>
+                            <option value="married">已婚</option>
+                            <option value="divorced">离异</option>
+                            <option value="widowed">丧偶</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">家庭成员</label>
+                        <input type="text" class="form-input" id="customerFamily" placeholder="如：配偶+2个孩子">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">联系地址</label>
+                    <input type="text" class="form-input" id="customerAddress" placeholder="详细地址">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">状态</label>
+                    <select class="form-select" id="customerStatus">
+                        <option value="new">新客户</option>
+                        <option value="contacted">已联系</option>
+                        <option value="interested">有意向</option>
+                        <option value="closed">已成交</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">优先级</label>
+                    <select class="form-select" id="customerPriority">
+                        <option value="medium">中优先级</option>
+                        <option value="high">高优先级</option>
+                        <option value="low">低优先级</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">需求简述</label>
+                    <textarea class="form-textarea" id="customerNeeds" placeholder="客户的主要保险需求和关注点..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">需求分析</label>
+                    <textarea class="form-textarea" id="customerAnalysis" placeholder="详细的客户需求分析结果..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">推荐产品</label>
+                    <input type="text" class="form-input" id="recommendedProduct" placeholder="如：中意悦享人生终身寿险">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">推荐理由</label>
+                    <textarea class="form-textarea" id="recommendationReason" placeholder="为什么推荐这个产品，产品优势和适合客户的原因..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">跟进记录</label>
+                    <textarea class="form-textarea" id="followUpRecords" placeholder="记录每次跟进的详细情况..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">备注信息</label>
+                    <textarea class="form-textarea" id="customerNotes" placeholder="其他重要信息和备注..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">下次跟进时间</label>
+                    <input type="datetime-local" class="form-input" id="nextFollowUp">
+                </div>
+            </form>
+            
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeCustomerModal()">取消</button>
+                <button type="button" class="btn" onclick="saveCustomer()">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <!-- 底部版权信息 -->
+    <!-- 底部版权信息 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Copyright © 2025 Customer Followup. All rights reserved by 赵珂</p>
+        </div>
+    </footer>
+    
+    <script>
+        let customers = [];
+        let editingCustomerId = null;
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCustomers();
+            updateStats();
+            renderCustomersTable();
+            
+            // 检查URL参数，如果有产品和分析信息，自动填充
+            const urlParams = new URLSearchParams(window.location.search);
+            const product = urlParams.get('product');
+            const analysis = urlParams.get('analysis');
+            
+            if (product || analysis) {
+                openAddCustomerModal();
+                if (product) {
+                    document.getElementById('recommendedProduct').value = decodeURIComponent(product);
+                }
+                if (analysis) {
+                    document.getElementById('customerAnalysis').value = decodeURIComponent(analysis);
+                }
+            }
+            
+            // 绑定搜索和筛选事件
+            document.getElementById('searchInput').addEventListener('input', filterCustomers);
+            document.getElementById('statusFilter').addEventListener('change', filterCustomers);
+            document.getElementById('priorityFilter').addEventListener('change', filterCustomers);
+        });
+        
+        // 加载客户数据
+        function loadCustomers() {
+            const stored = localStorage.getItem('customers_data');
+            if (stored) {
+                customers = JSON.parse(stored);
+            } else {
+                // 初始化示例数据
+                customers = [
+                    {
+                        id: 1,
+                        name: '张先生',
+                        phone: '138****1234',
+                        age: 35,
+                        gender: 'male',
+                        occupation: '软件工程师',
+                        income: '25-30万',
+                        maritalStatus: 'married',
+                        family: '配偶+1个孩子',
+                        address: '北京市朝阳区',
+                        needs: '家庭保障和财富传承',
+                        analysis: '客户35岁，有稳定收入，关注财富传承和保障需求，希望为家庭提供全面保障',
+                        recommendedProduct: '中意悦享人生终身寿险',
+                        recommendationReason: '该产品保障终身，具有现金价值增长功能，适合有财富传承需求的客户',
+                        followUpRecords: '2024-01-15: 初次沟通，客户对产品感兴趣\n2024-01-18: 详细介绍产品特点',
+                        notes: '对终身寿险很感兴趣，需要进一步沟通保费和保额',
+                        status: 'interested',
+                        priority: 'high',
+                        lastFollowUp: '2024-01-18',
+                        nextFollowUp: '2024-01-22T10:00',
+                        createdAt: '2024-01-10'
+                    },
+                    {
+                        id: 2,
+                        name: '李女士',
+                        phone: '139****5678',
+                        age: 28,
+                        gender: 'female',
+                        occupation: '市场专员',
+                        income: '15-20万',
+                        maritalStatus: 'single',
+                        family: '单身',
+                        address: '上海市浦东新区',
+                        needs: '重大疾病保障',
+                        analysis: '年轻女性，关注健康保障，预算有限，希望获得基础的重疾保障',
+                        recommendedProduct: '中意安康重大疾病保险',
+                        recommendationReason: '保费相对较低，保障范围全面，适合年轻人的重疾保障需求',
+                        followUpRecords: '2024-01-12: 初次接触，了解基本需求\n2024-01-15: 发送产品资料',
+                        notes: '初次接触，需要详细介绍重疾险的保障范围',
+                        status: 'contacted',
+                        priority: 'medium',
+                        lastFollowUp: '2024-01-15',
+                        nextFollowUp: '2024-01-20T14:00',
+                        createdAt: '2024-01-08'
+                    }
+                ];
+                saveCustomers();
+            }
+        }
+        
+        // 保存客户数据
+        function saveCustomers() {
+            localStorage.setItem('customers_data', JSON.stringify(customers));
+        }
+        
+        // 更新统计数据
+        function updateStats() {
+            const total = customers.length;
+            const newCount = customers.filter(c => c.status === 'new').length;
+            const interested = customers.filter(c => c.status === 'interested').length;
+            const closed = customers.filter(c => c.status === 'closed').length;
+            
+            document.getElementById('totalCustomers').textContent = total;
+            document.getElementById('newCustomers').textContent = newCount;
+            document.getElementById('interestedCustomers').textContent = interested;
+            document.getElementById('closedDeals').textContent = closed;
+        }
+        
+        // 渲染客户表格
+        function renderCustomersTable(filteredCustomers = null) {
+            const customersToShow = filteredCustomers || customers;
+            const tbody = document.getElementById('customersTableBody');
+            const customerCount = document.getElementById('customerCount');
+            
+            tbody.innerHTML = '';
+            customerCount.textContent = `共 ${customersToShow.length} 位客户`;
+            
+            customersToShow.forEach(customer => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="customer-name">${customer.name}</div>
+                        <div class="customer-phone">${customer.phone}</div>
+                        ${customer.age ? `<div class="customer-info">${customer.age}岁 ${customer.gender === 'male' ? '男' : customer.gender === 'female' ? '女' : ''}</div>` : ''}
+                        ${customer.address ? `<div class="customer-info">${customer.address}</div>` : ''}
+                    </td>
+                    <td>
+                        <div class="customer-occupation">${customer.occupation || '-'}</div>
+                        <div class="customer-income">${customer.income || '-'}</div>
+                    </td>
+                    <td>
+                        <div class="customer-needs" title="${customer.needs || ''}">
+                            ${customer.needs ? (customer.needs.length > 20 ? customer.needs.substring(0, 20) + '...' : customer.needs) : '-'}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="recommended-product" title="${customer.recommendedProduct || ''}">
+                            ${customer.recommendedProduct ? (customer.recommendedProduct.length > 15 ? customer.recommendedProduct.substring(0, 15) + '...' : customer.recommendedProduct) : '-'}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${customer.status}">
+                            ${getStatusText(customer.status)}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="priority-${customer.priority}">
+                            <i class="fas fa-circle"></i>
+                            ${getPriorityText(customer.priority)}
+                        </span>
+                    </td>
+                    <td>${customer.nextFollowUp ? formatDateTime(customer.nextFollowUp) : '-'}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-small" onclick="editCustomer(${customer.id})" title="编辑">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-small" onclick="viewCustomer(${customer.id})" title="查看详情">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-small" onclick="exportSingleCustomer(${customer.id})" title="导出客户">
+                                <i class="fas fa-file-export"></i>
+                            </button>
+                            <button class="btn-small" onclick="deleteCustomer(${customer.id})" title="删除">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // 获取状态文本
+        function getStatusText(status) {
+            const statusMap = {
+                'new': '新客户',
+                'contacted': '已联系',
+                'interested': '有意向',
+                'closed': '已成交'
+            };
+            return statusMap[status] || status;
+        }
+        
+        // 获取优先级文本
+        function getPriorityText(priority) {
+            const priorityMap = {
+                'high': '高',
+                'medium': '中',
+                'low': '低'
+            };
+            return priorityMap[priority] || priority;
+        }
+        
+        // 格式化日期时间
+        function formatDateTime(dateTimeStr) {
+            const date = new Date(dateTimeStr);
+            return date.toLocaleString('zh-CN', {
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        // 筛选客户
+        function filterCustomers() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            
+            let filtered = customers.filter(customer => {
+                const matchesSearch = !searchTerm || 
+                    customer.name.toLowerCase().includes(searchTerm) ||
+                    customer.phone.includes(searchTerm) ||
+                    (customer.notes && customer.notes.toLowerCase().includes(searchTerm));
+                
+                const matchesStatus = !statusFilter || customer.status === statusFilter;
+                const matchesPriority = !priorityFilter || customer.priority === priorityFilter;
+                
+                return matchesSearch && matchesStatus && matchesPriority;
+            });
+            
+            renderCustomersTable(filtered);
+        }
+        
+        // 打开添加客户模态框
+        function openAddCustomerModal() {
+            editingCustomerId = null;
+            document.getElementById('modalTitle').textContent = '添加客户';
+            document.getElementById('customerForm').reset();
+            document.getElementById('customerStatus').value = 'new';
+            document.getElementById('customerPriority').value = 'medium';
+            document.getElementById('customerModal').classList.add('show');
+        }
+        
+        // 编辑客户
+        function editCustomer(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) return;
+            
+            editingCustomerId = customerId;
+            document.getElementById('modalTitle').textContent = '编辑客户';
+            
+            // 填充表单
+            document.getElementById('customerName').value = customer.name || '';
+            document.getElementById('customerPhone').value = customer.phone || '';
+            document.getElementById('customerAge').value = customer.age || '';
+            document.getElementById('customerGender').value = customer.gender || '';
+            document.getElementById('customerOccupation').value = customer.occupation || '';
+            document.getElementById('customerIncome').value = customer.income || '';
+            document.getElementById('customerMaritalStatus').value = customer.maritalStatus || '';
+            document.getElementById('customerFamily').value = customer.family || '';
+            document.getElementById('customerAddress').value = customer.address || '';
+            document.getElementById('customerNeeds').value = customer.needs || '';
+            document.getElementById('customerAnalysis').value = customer.analysis || '';
+            document.getElementById('recommendedProduct').value = customer.recommendedProduct || '';
+            document.getElementById('recommendationReason').value = customer.recommendationReason || '';
+            document.getElementById('followUpRecords').value = customer.followUpRecords || '';
+            document.getElementById('customerNotes').value = customer.notes || '';
+            document.getElementById('customerStatus').value = customer.status || 'new';
+            document.getElementById('customerPriority').value = customer.priority || 'medium';
+            document.getElementById('nextFollowUp').value = customer.nextFollowUp || '';
+            
+            document.getElementById('customerModal').classList.add('show');
+        }
+        
+        // 保存客户
+        function saveCustomer() {
+            const form = document.getElementById('customerForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const customerData = {
+                name: document.getElementById('customerName').value.trim(),
+                phone: document.getElementById('customerPhone').value.trim(),
+                age: document.getElementById('customerAge').value ? parseInt(document.getElementById('customerAge').value) : null,
+                gender: document.getElementById('customerGender').value,
+                occupation: document.getElementById('customerOccupation').value.trim(),
+                income: document.getElementById('customerIncome').value.trim(),
+                maritalStatus: document.getElementById('customerMaritalStatus').value,
+                family: document.getElementById('customerFamily').value.trim(),
+                address: document.getElementById('customerAddress').value.trim(),
+                needs: document.getElementById('customerNeeds').value.trim(),
+                analysis: document.getElementById('customerAnalysis').value.trim(),
+                recommendedProduct: document.getElementById('recommendedProduct').value.trim(),
+                recommendationReason: document.getElementById('recommendationReason').value.trim(),
+                followUpRecords: document.getElementById('followUpRecords').value.trim(),
+                notes: document.getElementById('customerNotes').value.trim(),
+                status: document.getElementById('customerStatus').value,
+                priority: document.getElementById('customerPriority').value,
+                nextFollowUp: document.getElementById('nextFollowUp').value,
+                lastFollowUp: new Date().toISOString().split('T')[0]
+            };
+            
+            if (editingCustomerId) {
+                // 编辑现有客户
+                const customerIndex = customers.findIndex(c => c.id === editingCustomerId);
+                if (customerIndex !== -1) {
+                    customers[customerIndex] = { ...customers[customerIndex], ...customerData };
+                    showNotification('客户信息已更新', 'success');
+                }
+            } else {
+                // 添加新客户
+                const newCustomer = {
+                    id: Date.now(),
+                    ...customerData,
+                    createdAt: new Date().toISOString().split('T')[0]
+                };
+                customers.push(newCustomer);
+                showNotification('客户已添加', 'success');
+            }
+            
+            saveCustomers();
+            updateStats();
+            renderCustomersTable();
+            closeCustomerModal();
+        }
+        
+        // 查看客户详情
+        function viewCustomer(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) return;
+            
+            const detailWindow = window.open('', '_blank');
+            detailWindow.document.write(`
+                <html>
+                    <head>
+                        <title>${customer.name} - 客户详情</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+                            .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
+                            h1 { color: #333; border-bottom: 2px solid #007aff; padding-bottom: 10px; }
+                            .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 20px 0; }
+                            .info-item { padding: 15px; background: #f8f8f8; border-radius: 5px; }
+                            .label { font-weight: bold; color: #666; }
+                            .value { margin-top: 5px; }
+                            .notes { background: #f0f8ff; padding: 15px; border-radius: 5px; margin: 20px 0; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <h1>${customer.name} - 客户详情</h1>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="label">联系电话</div>
+                                    <div class="value">${customer.phone}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">年龄性别</div>
+                                    <div class="value">${customer.age || '-'}岁 ${customer.gender === 'male' ? '男' : customer.gender === 'female' ? '女' : '-'}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">客户状态</div>
+                                    <div class="value">${getStatusText(customer.status)}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">优先级</div>
+                                    <div class="value">${getPriorityText(customer.priority)}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">推荐产品</div>
+                                    <div class="value">${customer.recommendedProduct || '-'}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">下次跟进</div>
+                                    <div class="value">${customer.nextFollowUp ? formatDateTime(customer.nextFollowUp) : '-'}</div>
+                                </div>
+                            </div>
+                            ${customer.analysis ? `<div class="notes"><div class="label">需求分析</div><div class="value">${customer.analysis}</div></div>` : ''}
+                            ${customer.notes ? `<div class="notes"><div class="label">跟进备注</div><div class="value">${customer.notes}</div></div>` : ''}
+                        </div>
+                    </body>
+                </html>
+            `);
+        }
+        
+        // 删除客户
+        function deleteCustomer(customerId) {
+            if (confirm('确定要删除这位客户吗？此操作不可恢复。')) {
+                customers = customers.filter(c => c.id !== customerId);
+                saveCustomers();
+                updateStats();
+                renderCustomersTable();
+                showNotification('客户已删除', 'success');
+            }
+        }
+        
+        // 关闭客户模态框
+        function closeCustomerModal() {
+            document.getElementById('customerModal').classList.remove('show');
+            editingCustomerId = null;
+        }
+        
+        // 保存客户
+        function saveCustomer() {
+            const form = document.getElementById('customerForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const customerData = {
+                name: document.getElementById('customerName').value.trim(),
+                phone: document.getElementById('customerPhone').value.trim(),
+                age: document.getElementById('customerAge').value ? parseInt(document.getElementById('customerAge').value) : null,
+                gender: document.getElementById('customerGender').value,
+                occupation: document.getElementById('customerOccupation').value.trim(),
+                annualIncome: document.getElementById('customerIncome').value.trim(),
+                maritalStatus: document.getElementById('customerMarital').value,
+                familyMembers: document.getElementById('customerFamily').value.trim(),
+                address: document.getElementById('customerAddress').value.trim(),
+                status: document.getElementById('customerStatus').value,
+                priority: document.getElementById('customerPriority').value,
+                needsSummary: document.getElementById('customerNeeds').value.trim(),
+                analysis: document.getElementById('customerAnalysis').value.trim(),
+                recommendedProduct: document.getElementById('recommendedProduct').value.trim(),
+                recommendationReason: document.getElementById('recommendationReason').value.trim(),
+                followUpRecord: document.getElementById('followUpRecord').value.trim(),
+                notes: document.getElementById('customerNotes').value.trim(),
+                nextFollowUp: document.getElementById('nextFollowUp').value,
+                lastFollowUp: new Date().toISOString().split('T')[0]
+            };
+            
+            if (editingCustomerId) {
+                // 编辑现有客户
+                const index = customers.findIndex(c => c.id === editingCustomerId);
+                if (index !== -1) {
+                    customers[index] = { ...customers[index], ...customerData };
+                    showNotification('客户信息已更新', 'success');
+                }
+            } else {
+                // 添加新客户
+                const newCustomer = {
+                    id: Date.now(),
+                    ...customerData,
+                    createdAt: new Date().toISOString().split('T')[0]
+                };
+                customers.unshift(newCustomer);
+                showNotification('客户已添加', 'success');
+            }
+            
+            saveCustomers();
+            updateStats();
+            renderCustomersTable();
+            closeCustomerModal();
+        }
+        
+        // 导出数据
+        function exportData() {
+            const csvContent = generateCSV();
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `客户数据_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showNotification('数据已导出', 'success');
+        }
+        
+        // 生成完整CSV内容
+        function generateCSV() {
+            const headers = ['姓名', '电话', '年龄', '性别', '职业', '年收入', '婚姻状况', '家庭成员', '联系地址', '状态', '优先级', '需求简述', '需求分析', '推荐产品', '推荐理由', '跟进记录', '备注信息', '最后跟进', '下次跟进', '创建时间'];
+            const rows = customers.map(customer => [
+                customer.name,
+                customer.phone,
+                customer.age || '',
+                customer.gender === 'male' ? '男' : customer.gender === 'female' ? '女' : '',
+                customer.occupation || '',
+                customer.annualIncome || '',
+                getMaritalStatusText(customer.maritalStatus),
+                customer.familyMembers || '',
+                customer.address || '',
+                getStatusText(customer.status),
+                getPriorityText(customer.priority),
+                customer.needsSummary || '',
+                customer.analysis || '',
+                customer.recommendedProduct || '',
+                customer.recommendationReason || '',
+                customer.followUpRecord || '',
+                customer.notes || '',
+                customer.lastFollowUp || '',
+                customer.nextFollowUp || '',
+                customer.createdAt || ''
+            ]);
+            
+            return [headers, ...rows].map(row => 
+                row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')
+            ).join('\n');
+        }
+        
+        // 单独客户导出
+        function exportSingleCustomer(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) return;
+            
+            const csvContent = generateSingleCustomerCSV(customer);
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `${customer.name}_客户跟进记录_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showNotification(`${customer.name}的客户记录已导出`, 'success');
+        }
+        
+        // 生成单个客户CSV内容
+        function generateSingleCustomerCSV(customer) {
+            const data = [
+                ['客户信息', ''],
+                ['姓名', customer.name],
+                ['电话', customer.phone],
+                ['年龄', customer.age || ''],
+                ['性别', customer.gender === 'male' ? '男' : customer.gender === 'female' ? '女' : ''],
+                ['职业', customer.occupation || ''],
+                ['年收入', customer.annualIncome || ''],
+                ['婚姻状况', getMaritalStatusText(customer.maritalStatus)],
+                ['家庭成员', customer.familyMembers || ''],
+                ['联系地址', customer.address || ''],
+                ['', ''],
+                ['跟进信息', ''],
+                ['客户状态', getStatusText(customer.status)],
+                ['优先级', getPriorityText(customer.priority)],
+                ['需求简述', customer.needsSummary || ''],
+                ['需求分析', customer.analysis || ''],
+                ['推荐产品', customer.recommendedProduct || ''],
+                ['推荐理由', customer.recommendationReason || ''],
+                ['跟进记录', customer.followUpRecord || ''],
+                ['备注信息', customer.notes || ''],
+                ['最后跟进', customer.lastFollowUp || ''],
+                ['下次跟进', customer.nextFollowUp || ''],
+                ['创建时间', customer.createdAt || '']
+            ];
+            
+            return data.map(row => 
+                row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')
+            ).join('\n');
+        }
+        
+        // 获取婚姻状况文本
+        function getMaritalStatusText(status) {
+            const statusMap = {
+                'single': '未婚',
+                'married': '已婚',
+                'divorced': '离异',
+                'widowed': '丧偶'
+            };
+            return statusMap[status] || '';
+        }
+        
+        // 显示通知
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面特定的初始化代码
+        });
+    </script>
+    <script src="common.js"></script>
+    <script>
+    </script>
+</body>
+</html>

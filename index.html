@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中意赵珂保险AI智能引擎 - ZHONGYI Genesis AI Insurance Engine</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #1d1d1f;
+            --accent-color: #007aff;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(0, 0, 0, 0.8);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --success-color: #30d158;
+            --warning-color: #ff9f0a;
+            --error-color: #ff453a;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--primary-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 40px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-color), #0056cc);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .nav-item:hover {
+            color: var(--text-primary);
+        }
+        
+        .settings-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 16px;
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        /* Hero Banner区域 */
+        .hero {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+            background-size: 1920px 1080px;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 1080px;
+            transition: background-image 1s ease-in-out;
+        }
+        
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+            z-index: 2;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+        }
+        
+        .hero-title {
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 900;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffffff, #a1a1a6, #007aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            color: var(--text-secondary);
+            margin-bottom: 50px;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+        
+        .hero-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* 功能模块区域 */
+        .modules-section {
+            padding: 100px 40px;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .modules-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .modules-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, #a1a1a6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .modules-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 80px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+            align-items: stretch;
+        }
+        
+        @media (max-width: 1200px) {
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .module-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px 30px;
+            backdrop-filter: blur(20px);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+            box-shadow: 0 20px 40px rgba(0, 122, 255, 0.2);
+        }
+        
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), #0056cc);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .module-card:hover::before {
+            opacity: 1;
+        }
+        
+        .module-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-color), #0056cc);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+        
+        .module-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+        
+        .module-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .module-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .module-features li {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+        
+        .module-features li::before {
+            content: '✓';
+            color: var(--success-color);
+            font-weight: bold;
+        }
+        
+        .module-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .module-btn:hover {
+            background: #0056cc;
+            transform: translateY(-2px);
+        }
+        
+        /* 设置面板 */
+        .settings-panel {
+            position: fixed;
+            top: 80px;
+            right: 40px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            min-width: 400px;
+            backdrop-filter: blur(20px);
+            display: none;
+            z-index: 1001;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .settings-panel.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .settings-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .settings-item {
+            margin-bottom: 20px;
+        }
+        
+        .settings-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 500;
+        }
+        
+        .settings-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .settings-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .settings-save {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+        
+        .settings-save:hover {
+            background: #0056cc;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+                height: 60px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-content {
+                padding: 0 20px;
+            }
+            
+            .modules-section {
+                padding: 60px 20px;
+            }
+            
+            .modules-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .settings-panel {
+                right: 20px;
+                min-width: 300px;
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 通知样式 */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 40px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: var(--text-primary);
+            backdrop-filter: blur(20px);
+            z-index: 1002;
+            transform: translateX(400px);
+            transition: var(--transition);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            border-color: var(--success-color);
+        }
+        
+        .notification.error {
+            border-color: var(--error-color);
+        }
+        
+        /* 底部版权信息样式 */
+        .footer {
+            background: var(--primary-color);
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        
+        .footer-content p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <span>中意赵珂保险AI智能引擎</span>
+        </div>
+        
+        <ul class="nav-menu">
+            <li><a href="#home" class="nav-item">首页</a></li>
+            <li><a href="#modules" class="nav-item">功能模块</a></li>
+            <li><a href="/about.html" class="nav-item">关于我</a></li>
+        </ul>
+        
+        <button class="settings-btn" onclick="toggleSettings()">
+            <i class="fas fa-cog"></i>
+            <span>设置</span>
+        </button>
+    </nav>
+    
+    <!-- Hero Banner区域 -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">Insurance Engine</h1>
+            <h2 class="hero-subtitle">智能保险分析引擎</h2>
+            <p class="hero-description">
+                专业保险顾问，让每一份保障都恰到好处
+            </p>
+        </div>
+    </section>
+    
+    <!-- 功能模块区域 -->
+    <section class="modules-section" id="modules">
+        <div class="modules-container">
+            <h2 class="modules-title">核心功能模块</h2>
+            <p class="modules-subtitle">四大智能模块，全方位提升保险咨询效率</p>
+            
+            <div class="modules-grid">
+                <!-- 模块1：客户需求分析 -->
+                <div class="module-card" onclick="openModule('customer-analysis')">
+                    <div class="module-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h3 class="module-title">客户需求分析</h3>
+                    <p class="module-description">
+                        智能分析客户聊天记录和基本信息，通过DeepSeek AI生成标准化的客户需求报告
+                    </p>
+                    <ul class="module-features">
+                        <li>客户对话智能分析</li>
+                        <li>需求标签自动生成</li>
+                        <li>风险偏好评估</li>
+                        <li>购买意向识别</li>
+                    </ul>
+                    <button class="module-btn">
+                        <i class="fas fa-play"></i>
+                        <span>开始分析</span>
+                    </button>
+                </div>
+                
+                <!-- 模块2：产品文档处理 -->
+                <div class="module-card" onclick="openModule('document-processing')">
+                    <div class="module-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="module-title">产品文档处理</h3>
+                    <p class="module-description">
+                        自动读取和处理中意人寿13款保险产品文档，生成AI可读的标准化产品库
+                    </p>
+                    <ul class="module-features">
+                        <li>文档自动读取</li>
+                        <li>内容智能清洗</li>
+                        <li>格式标准化</li>
+                        <li>产品库更新</li>
+                    </ul>
+                    <button class="module-btn">
+                        <i class="fas fa-sync"></i>
+                        <span>处理文档</span>
+                    </button>
+                </div>
+                
+                <!-- 模块3：产品匹配推荐 -->
+                <div class="module-card" onclick="openModule('product-matching')">
+                    <div class="module-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="module-title">产品匹配推荐</h3>
+                    <p class="module-description">
+                        基于客户需求分析结果，智能匹配最适合的2-3款保险产品并提供推荐理由
+                    </p>
+                    <ul class="module-features">
+                        <li>智能产品匹配</li>
+                        <li>匹配度评分</li>
+                        <li>推荐理由生成</li>
+                        <li>保费计算</li>
+                    </ul>
+                    <button class="module-btn">
+                        <i class="fas fa-magic"></i>
+                        <span>匹配产品</span>
+                    </button>
+                </div>
+                
+                <!-- 模块4：客户跟进管理 -->
+                <div class="module-card" onclick="openModule('customer-management')">
+                    <div class="module-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3 class="module-title">客户跟进管理</h3>
+                    <p class="module-description">
+                        在线数据库表格形式记录和管理客户详细信息，支持跟进状态追踪
+                    </p>
+                    <ul class="module-features">
+                        <li>客户信息管理</li>
+                        <li>跟进状态追踪</li>
+                        <li>数据统计分析</li>
+                        <li>导出报表功能</li>
+                    </ul>
+                    <button class="module-btn">
+                        <i class="fas fa-table"></i>
+                        <span>管理客户</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 设置面板 -->
+    <div class="settings-panel" id="settingsPanel">
+        <h3 class="settings-title">
+            <i class="fas fa-cog"></i>
+            系统设置
+        </h3>
+        
+        <div class="settings-item">
+            <label class="settings-label">DeepSeek API Key</label>
+            <input type="password" class="settings-input" id="apiKey" placeholder="请输入您的DeepSeek API密钥">
+        </div>
+        
+        <div class="settings-item">
+            <label class="settings-label">API Base URL</label>
+            <input type="text" class="settings-input" id="apiBaseUrl" value="https://api.deepseek.com" placeholder="API基础URL">
+        </div>
+        
+        <div class="settings-item">
+            <label class="settings-label">模型名称</label>
+            <input type="text" class="settings-input" id="modelName" value="deepseek-chat" placeholder="使用的模型名称">
+        </div>
+        
+        <button class="settings-save" onclick="saveSettings()">
+            <i class="fas fa-save"></i>
+            保存设置
+        </button>
+    </div>
+    
+    <!-- 通知组件 -->
+    <div class="notification" id="notification"></div>
+    
+    <!-- 底部版权信息 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Copyright © 2025 Insurance Engine. All rights reserved by 赵珂</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 全局变量
+        let currentModule = null;
+        let apiConfig = {
+            apiKey: localStorage.getItem('deepseek_api_key') || '',
+            baseUrl: localStorage.getItem('api_base_url') || 'https://api.deepseek.com',
+            model: localStorage.getItem('model_name') || 'deepseek-chat'
+        };
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            initSmoothScroll();
+        });
+        
+        // 设置面板切换
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            panel.classList.toggle('show');
+        }
+        
+        // 加载设置
+        function loadSettings() {
+            document.getElementById('apiKey').value = apiConfig.apiKey;
+            document.getElementById('apiBaseUrl').value = apiConfig.baseUrl;
+            document.getElementById('modelName').value = apiConfig.model;
+        }
+        
+        // 保存设置
+        function saveSettings() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const baseUrl = document.getElementById('apiBaseUrl').value.trim();
+            const model = document.getElementById('modelName').value.trim();
+            
+            if (!apiKey) {
+                showNotification('请输入API密钥', 'error');
+                return;
+            }
+            
+            apiConfig.apiKey = apiKey;
+            apiConfig.baseUrl = baseUrl;
+            apiConfig.model = model;
+            
+            localStorage.setItem('deepseek_api_key', apiKey);
+            localStorage.setItem('api_base_url', baseUrl);
+            localStorage.setItem('model_name', model);
+            
+            showNotification('设置保存成功', 'success');
+            toggleSettings();
+        }
+        
+        // 显示通知
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // 打开功能模块
+        function openModule(moduleType) {
+            if (!apiConfig.apiKey) {
+                showNotification('请先配置API密钥', 'error');
+                toggleSettings();
+                return;
+            }
+            
+            currentModule = moduleType;
+            
+            switch(moduleType) {
+                case 'customer-analysis':
+                    window.open('/customer-analysis.html', '_blank');
+                    break;
+                case 'document-processing':
+                    window.open('/document-processing.html', '_blank');
+                    break;
+                case 'product-matching':
+                    window.open('/product-matching.html', '_blank');
+                    break;
+                case 'customer-management':
+                    window.open('/customer-followup.html', '_blank');
+                    break;
+                default:
+                    showNotification('功能模块开发中...', 'warning');
+            }
+        }
+        
+        // 平滑滚动
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // 点击外部关闭设置面板
+        document.addEventListener('click', function(e) {
+            const settingsPanel = document.getElementById('settingsPanel');
+            const settingsBtn = document.querySelector('.settings-btn');
+            
+            if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)) {
+                settingsPanel.classList.remove('show');
+            }
+        });
+        
+        // 主页特定的背景初始化
+        function initHeroBackground() {
+            const hero = document.querySelector('.hero');
+            if (hero && window.backgroundImages) {
+                const randomIndex = Math.floor(Math.random() * window.backgroundImages.length);
+                hero.style.backgroundImage = `linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('${window.backgroundImages[randomIndex]}')`;
+                
+                // 每5秒切换一次背景
+                setInterval(() => {
+                    const nextIndex = Math.floor(Math.random() * window.backgroundImages.length);
+                    hero.style.backgroundImage = `linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('${window.backgroundImages[nextIndex]}')`;
+                }, 5000);
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initHeroBackground();
+        });
+    </script>
+    <script src="common.js"></script>
+    <script>
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            // ESC键关闭设置面板
+            if (e.key === 'Escape') {
+                document.getElementById('settingsPanel').classList.remove('show');
+            }
+            
+            // Ctrl/Cmd + S 保存设置
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                if (document.getElementById('settingsPanel').classList.contains('show')) {
+                    saveSettings();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
