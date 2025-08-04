@@ -13,7 +13,7 @@ class MainPageController {
         }
 
         // 平滑滚动导航
-        const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+        const navLinks = document.querySelectorAll('.nav-item[href^="#"]');
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -69,7 +69,7 @@ class MainPageController {
 
     updateActiveNavOnScroll() {
         const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+        const navLinks = document.querySelectorAll('.nav-item[href^="#"]');
         
         let currentSection = '';
         sections.forEach(section => {
@@ -89,7 +89,7 @@ class MainPageController {
     }
 
     updateActiveNavLink(activeLink) {
-        const navLinks = document.querySelectorAll('.nav-link');
+        const navLinks = document.querySelectorAll('.nav-item');
         navLinks.forEach(link => link.classList.remove('active'));
         activeLink.classList.add('active');
     }
