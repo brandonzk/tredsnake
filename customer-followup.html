@@ -602,17 +602,12 @@
 <body>
     <script>
         // 设置随机背景图片
-        const backgroundImages = [
-            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (21).png',
-            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (22).png',
-            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (23).png',
-            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (24).png',
-            '中意人寿/中意产品介绍/banner/Appeal for Unblocking Account (25).png'
-        ];
-        const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
         document.addEventListener('DOMContentLoaded', function() {
-            const banner = document.querySelector('.page-banner');
-            banner.style.backgroundImage = `linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('${randomImage}')`;
+            if (window.backgroundImages && window.backgroundImages.length > 0) {
+                const randomImage = window.backgroundImages[Math.floor(Math.random() * window.backgroundImages.length)];
+                const banner = document.querySelector('.page-banner');
+                banner.style.backgroundImage = `linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('${randomImage}')`;
+            }
         });
     </script>
     <div class="page-banner">
