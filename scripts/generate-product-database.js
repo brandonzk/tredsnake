@@ -1,4 +1,8 @@
-{
+const fs = require('fs');
+const path = require('path');
+
+// 中意人寿7款主推产品的标准化数据
+const productsData = {
   "products": [
     {
       "productInfo": {
@@ -208,7 +212,24 @@
       }
     }
   ],
-  "lastUpdated": "2025-08-12",
+  "lastUpdated": new Date().toISOString().split('T')[0],
   "version": "1.0",
   "totalProducts": 7
+};
+
+// 生成产品库文件
+function generateProductDatabase() {
+  try {
+    const outputPath = path.join(__dirname, '..', 'products-database.json');
+    fs.writeFileSync(outputPath, JSON.stringify(productsData, null, 2), 'utf8');
+    console.log(`✅ 产品库文件已生成: ${outputPath}`);
+    console.log(`📊 包含 ${productsData.products.length} 个产品`);
+    console.log(`📅 更新时间: ${productsData.lastUpdated}`);
+  } catch (error) {
+    console.error('❌ 生成产品库文件失败:', error);
+    process.exit(1);
+  }
 }
+
+// 执行生成
+generateProductDatabase();

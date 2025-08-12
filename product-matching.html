@@ -751,53 +751,67 @@
             }
         }
         
-        // 获取产品库
-        function getProductDatabase() {
-            const database = localStorage.getItem('product_database');
-            if (database) {
-                try {
-                    const products = JSON.parse(database);
-                    console.log('产品库数据:', products);
-                    return products;
-                } catch (error) {
-                    console.error('解析产品库数据失败:', error);
-                    return [];
-                }
-            } else {
-                console.warn('产品库为空，请先在文档处理页面处理产品文档');
-                return [];
-            }
+        // 获取产品库 - 优化版本
+async function getProductDatabase() {
+    // 首先尝试从预处理的产品库文件加载
+    try {
+        const response = await fetch('./products-database.json');
+        if (response.ok) {
+            const data = await response.json();
+            console.log('✅ 从预处理产品库加载数据:', data.products.length, '个产品');
+            return data.products;
         }
-        
-        // 执行产品匹配
-        async function performProductMatching(customerAnalysis, additionalInfo, productDatabase) {
-            const productList = productDatabase.map((product, index) => {
-                return `${index + 1}. 产品名称：${product.originalName}\n   产品类型：${product.type}\n   产品特点：${product.processedContent.substring(0, 800)}...`;
-            }).join('\n\n');
-            
-            const prompt = `作为中意人寿专业的保险产品推荐专家，请根据客户需求分析结果，从以下中意人寿产品库中推荐2-3个最适合的保险产品。
+    } catch (error) {
+        console.warn('⚠️ 无法加载预处理产品库，尝试从localStorage加载:', error);
+    }
+    // 备用方案：从localStorage加载
+    const database = localStorage.getItem('product_database');
+    if (database) {
+        try {
+            const products = JSON.parse(database);
+            console.log('📦 从localStorage加载产品库数据:', products.length, '个产品');
+            return products;
+        } catch (error) {
+            console.error('❌ 解析产品库数据失败:', error);
+            return [];
+        }
+    } else {
+        console.warn('⚠️ 产品库为空，请先处理产品文档或检查预处理产品库文件');
+        return [];
+    }
+}
+
+// 优化的产品匹配函数
+async function performProductMatching(customerAnalysis, additionalInfo, productDatabase) {
+    // 使用预处理的结构化数据，减少AI处理负担
+    const productSummaries = productDatabase.map((product, index) => {
+        const info = product.productInfo || product;
+        const features = product.coreFeatures || {};
+        const target = product.targetCustomers || {};
+        return `${index + 1}. 产品名称：${info.productName || info.originalName}
+   产品类型：${info.productType || info.type}
+   主要保障：${(features.mainBenefits || []).join('、')}
+   产品亮点：${(features.keyHighlights || []).join('、')}
+   目标客户：${target.primaryTarget ? Object.values(target.primaryTarget).join('、') : '通用'}`;
+    }).join('\n\n');
+
+    const prompt = `作为中意人寿专业的保险产品推荐专家，请根据客户需求分析结果，从以下中意人寿产品库中推荐2-3个最适合的保险产品。
 
 【客户需求分析】
 ${customerAnalysis}
 
-${additionalInfo ? `【补充信息】\n${additionalInfo}\n\n` : ''}【中意人寿产品库】（共${productDatabase.length}个产品）
-${productList}
+${additionalInfo ? `【补充信息】\n${additionalInfo}\n\n` : ''}【中意人寿产品库】
+${productSummaries}
 
-【推荐要求】
-1. 严格限制：只能从上述产品库中选择，产品名称必须完全一致
-2. 推荐数量：2-3个产品，按匹配度排序
-3. 匹配原则：基于客户年龄、收入、保障需求、风险偏好等因素
-4. 分析深度：详细说明推荐理由和适用性
-
-【输出格式】请严格按照以下JSON格式输出：
+请以JSON格式返回推荐结果，格式如下：
 {
   "recommendations": [
     {
-      "productName": "产品库中的确切产品名称",
+      "productName": "产品名称（必须与产品库中的名称完全一致）",
       "productType": "产品类型",
       "matchScore": 95,
-      "keyFeatures": ["核心特色1", "核心特色2", "核心特色3"],
-      "matchReason": "基于客户具体需求的详细匹配分析，说明为什么推荐此产品",
+      "keyFeatures": ["特色1", "特色2", "特色3"],
+      "matchReason": "基于客户具体需求的详细匹配分析",
       "suitability": "针对客户情况的适用性分析和注意事项"
     }
   ],
@@ -805,46 +819,45 @@ ${productList}
 }
 
 请确保推荐的产品名称与产品库中的名称完全一致，并提供专业的保险规划建议。`;
-            
-            const response = await fetch(`${apiConfig.baseUrl}/chat/completions`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiConfig.apiKey}`
-                },
-                body: JSON.stringify({
-                    model: apiConfig.model,
-                    messages: [{ role: 'user', content: prompt }],
-                    temperature: 0.3,
-                    max_tokens: 2000
-                })
-            });
-            
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error?.message || `HTTP ${response.status}`);
-            }
-            
-            const data = await response.json();
-            const content = data.choices[0].message.content;
-            
-            try {
-                // 尝试解析JSON响应
-                const jsonMatch = content.match(/\{[\s\S]*\}/);
-                if (jsonMatch) {
-                    return JSON.parse(jsonMatch[0]);
-                } else {
-                    throw new Error('AI响应格式不正确');
-                }
-            } catch (parseError) {
-                console.error('解析AI响应失败:', parseError);
-                // 如果JSON解析失败，返回一个默认结构
-                return {
-                    recommendations: [],
-                    summary: content
-                };
-            }
+
+    // API调用逻辑保持不变
+    const response = await fetch(`${apiConfig.baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiConfig.apiKey}`
+        },
+        body: JSON.stringify({
+            model: apiConfig.model,
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.3,
+            max_tokens: 2000
+        })
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error?.message || `HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    const content = data.choices[0].message.content;
+
+    try {
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            return JSON.parse(jsonMatch[0]);
+        } else {
+            throw new Error('AI响应格式不正确');
         }
+    } catch (parseError) {
+        console.error('解析AI响应失败:', parseError);
+        return {
+            recommendations: [],
+            summary: content
+        };
+    }
+}
         
         // 显示匹配结果
         function displayMatchingResults(result) {
