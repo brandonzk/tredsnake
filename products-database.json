@@ -1,0 +1,40 @@
+{
+  "products": [
+    {
+      "productInfo": {
+        "productName": "中意一生挚爱（荣耀版）终身寿险（分红型）",
+        "productType": "终身寿险（分红型）",
+        "company": "中意人寿保险有限公司",
+        "lastUpdated": "2024-01-15",
+        "version": "2024版"
+      },
+      "coreFeatures": {
+        "mainBenefits": [
+          "终身身故保障",
+          "年度分红收益",
+          "现金价值积累"
+        ],
+        "keyHighlights": [
+          "保额可达500万",
+          "分红抵御通胀",
+          "现金价值稳定增长"
+        ]
+      },
+      "targetCustomers": {
+        "primaryTarget": {
+          "ageGroup": "25-55岁",
+          "incomeLevel": "中高收入",
+          "familyStatus": "已婚有子女"
+        }
+      },
+      "salesTalkingPoints": {
+        "openingLines": [
+          "您好，我想为您介绍一款能够实现财富传承的终身寿险产品"
+        ]
+      }
+    }
+    // ... 其他产品
+  ],
+  "lastUpdated": "2024-12-19",
+  "version": "1.0"
+}
