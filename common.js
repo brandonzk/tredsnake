@@ -106,7 +106,7 @@ if (typeof module !== 'undefined' && module.exports) {
 const SettingsManager = {
     // 切换设置面板
     toggleSettings: function() {
-        const settingsPanel = document.getElementById('settings-panel');
+        const settingsPanel = document.getElementById('settingsPanel'); // 修改这里：从 'settings-panel' 改为 'settingsPanel'
         if (settingsPanel) {
             settingsPanel.classList.toggle('show');
         }
