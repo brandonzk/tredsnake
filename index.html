@@ -736,16 +736,16 @@
             
             switch(moduleType) {
                 case 'customer-analysis':
-                    window.open('customer-analysis.html', '_blank');
+                    window.location.href = 'customer-analysis.html';
                     break;
                 case 'document-processing':
-                    window.open('document-processing.html', '_blank');
+                    window.location.href = 'document-processing.html';
                     break;
                 case 'product-matching':
-                    window.open('product-matching.html', '_blank');
+                    window.location.href = 'product-matching.html';
                     break;
                 case 'customer-management':
-                    window.open('customer-followup.html', '_blank');
+                    window.location.href = 'customer-followup.html';
                     break;
                 default:
                     showNotification('功能模块开发中...', 'warning');

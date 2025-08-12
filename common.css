@@ -119,20 +119,108 @@ body {
 }
 
 /* 通知样式 */
+/* 统一按钮样式 */
+.btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #007aff 0%, #0051d5 100%);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #30d158 0%, #248a3d 100%);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ff9f0a 0%, #d1810a 100%);
+}
+
+.btn-error {
+    background: linear-gradient(135deg, #ff453a 0%, #d70015 100%);
+}
+
+/* 统一设置面板样式 */
+.settings-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid var(--border-color);
+    z-index: 1000;
+    transition: var(--transition);
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.settings-panel.show {
+    right: 0;
+}
+
+/* 统一表单样式 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+/* 统一通知样式 */
 .notification {
     position: fixed;
-    top: 20px;
+    top: 100px;
     right: 20px;
     background: var(--glass-bg);
+    backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 15px 20px;
+    padding: 16px 20px;
     color: var(--text-primary);
-    backdrop-filter: blur(20px);
+    font-weight: 500;
+    z-index: 1001;
     transform: translateX(400px);
     transition: var(--transition);
-    z-index: 1001;
-    max-width: 350px;
+    max-width: 300px;
 }
 
 .notification.show {
@@ -142,6 +230,11 @@ body {
 .notification.success {
     border-color: var(--success-color);
     background: rgba(48, 209, 88, 0.1);
+}
+
+.notification.warning {
+    border-color: var(--warning-color);
+    background: rgba(255, 159, 10, 0.1);
 }
 
 .notification.error {

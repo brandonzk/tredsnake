@@ -101,3 +101,48 @@ if (typeof module !== 'undefined' && module.exports) {
         initializePage
     };
 }
+
+// 统一设置管理器
+const SettingsManager = {
+    // 切换设置面板
+    toggleSettings: function() {
+        const settingsPanel = document.getElementById('settings-panel');
+        if (settingsPanel) {
+            settingsPanel.classList.toggle('show');
+        }
+    },
+    
+    // 加载设置
+    loadSettings: function() {
+        const saved = localStorage.getItem('zhongyi-settings');
+        if (saved) {
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                console.error('设置加载失败:', e);
+            }
+        }
+        return {
+            apiKey: '',
+            model: 'gpt-4',
+            temperature: 0.7
+        };
+    },
+    
+    // 保存设置
+    saveSettings: function(settings) {
+        try {
+            localStorage.setItem('zhongyi-settings', JSON.stringify(settings));
+            showNotification('设置已保存', 'success');
+        } catch (e) {
+            console.error('设置保存失败:', e);
+            showNotification('设置保存失败', 'error');
+        }
+    }
+};
+
+// 将设置管理器暴露到全局
+window.SettingsManager = SettingsManager;
+window.toggleSettings = SettingsManager.toggleSettings;
+window.loadSettings = SettingsManager.loadSettings;
+window.saveSettings = SettingsManager.saveSettings;
